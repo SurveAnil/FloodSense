@@ -51,11 +51,11 @@ FloodSense is currently at the conceptual and pre-MVP stage. The datasets, spati
 
 ## Documentation
 
-- [Product Requirements Document](PRD.md)
-- [Technical Requirements Document](TRD.md)
-- [Design Brief](Design.md)
-- [Project Report](Project_Report.md)
-- [Audit Baseline](AUDIT_BASELINE.md)
+- [Product Requirements Document](https://github.com/SurveAnil/FloodSense/blob/master/PRD.md)
+- [Technical Requirements Document](https://github.com/SurveAnil/FloodSense/blob/master/TRD.md)
+- [Design Brief](https://github.com/SurveAnil/FloodSense/blob/master/Design.md)
+- [Project Report](https://github.com/SurveAnil/FloodSense/blob/master/Project_Report.md)
+- [Audit Baseline](https://github.com/SurveAnil/FloodSense/blob/master/AUDIT_BASELINE.md)
 
 ## Scope
 
