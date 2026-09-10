@@ -47,7 +47,39 @@ Risk predictions are decision-support outputs, not guarantees of flooding or off
 
 ## Project status
 
-FloodSense is currently at the conceptual and pre-MVP stage. The datasets, spatial unit, prediction horizon, final model, and operational performance targets remain subject to validation and availability of real-world data.
+### Phase 1 — Frontend demo (current)
+
+The current app is a deployable React + Tailwind dashboard using realistic Pune placeholder data. It includes:
+
+- Flood Risk Dashboard with a risk summary, placeholder GIS map, priority panel, and rainfall context
+- Priority Hotspots ranked table with keyboard-accessible row selection
+- Location Detail with clearly separated observed versus predicted information
+- Data Status view for IMD, CWC, PMC, and GIS source states
+
+All scores, rainfall values, timestamps, source states, and map positions are mock/demo values. They are not validated predictions, live data, official alerts, or evidence of street-level precision.
+
+Run locally:
+
+```bash
+npm install
+npm run dev
+```
+
+Build for deployment:
+
+```bash
+npm run build
+npm run preview
+```
+
+Configuration is documented in `.env.example`. The current `src/services/data-service.ts` exposes a small data-service interface backed by `src/mock-data/`; Phase 2 can replace that implementation with verified IMD/CWC/PMC/GIS adapters without changing page components.
+
+### Planned next phases
+
+- **Phase 2:** Verify data access and replace mock service with normalized source adapters, validation, freshness, and provenance.
+- **Phase 3:** Add the historical training dataset, baseline model, evaluation, model versioning, and prediction service.
+
+Known limitations include a placeholder map (no live GIS tiles), no backend/API, no authentication, no ML model, no real-time refresh, and no production monitoring.
 
 ## Documentation
 
