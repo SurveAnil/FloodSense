@@ -11,6 +11,7 @@
 | Baseline model | Logistic regression with deterministic replay feature rows | Required baseline from the TRD; interpretable and light enough for local development. | Validated historical labels justify candidate comparison. |
 | Risk thresholds | Low <35, Moderate 35-54, High 55-74, Critical >=75 | Temporary, monotonic demo thresholds that preserve four UI states. | Calibrated validation data and operational cost analysis are available. |
 | Missing optional GIS | Preserve `Unavailable`; do not impute safety | Existing product rule says missing data must not become low risk. | GIS contract and feature dependency are verified. |
+| Baseline feature vector | Current rainfall, forecast rainfall, historical hotspot indicator, and terrain signal in a fixed order | These are the only normalized fields available in the replay snapshot and keep the first model interpretable. | Confirmed source history, spatial geometry, and validated labels support additional features. |
 
 ## Provider integration note
 

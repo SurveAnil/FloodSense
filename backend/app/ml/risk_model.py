@@ -4,6 +4,7 @@ from typing import Any
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 
+from app.ml.features import FEATURE_NAMES, build_feature_vector
 from app.models import LocationResponse
 
 
@@ -15,7 +16,7 @@ class RiskModel:
     the UI while keeping model selection and labels revisitable.
     """
 
-    FEATURE_NAMES = ("current_rainfall", "forecast_rainfall", "hotspot", "terrain_signal")
+    FEATURE_NAMES = FEATURE_NAMES
 
     def __init__(self) -> None:
         training = np.array([
@@ -29,12 +30,7 @@ class RiskModel:
         self._model.fit(training, labels)
 
     def predict(self, record: dict[str, Any]) -> LocationResponse:
-        features = np.array([[
-            record["currentRainfallMm"],
-            record["forecastRainfallMm"],
-            int(record["historicalHotspot"]),
-            record["terrainSignal"],
-        ]], dtype=float)
+        features = build_feature_vector(record)
         probability = float(self._model.predict_proba(features)[0, 1])
         score = max(0, min(100, round(probability * 100)))
         risk = self._category(score)
