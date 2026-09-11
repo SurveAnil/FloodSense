@@ -14,4 +14,4 @@
 
 ## Provider integration note
 
-IMD, CWC, and PMC adapter contracts are represented by the replay boundary only. No credentials, endpoint behavior, or live response schema has been invented.
+IMD, CWC, PMC, and GIS now have explicit normalized adapter contracts with replay-backed implementations. No credentials, endpoint behavior, or live response schema has been invented; the replay implementation remains the only active provider.
