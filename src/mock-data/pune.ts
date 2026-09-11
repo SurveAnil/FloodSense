@@ -1,6 +1,7 @@
 import type { DashboardData } from '../types/domain';
 
 export const puneDashboardData: DashboardData = {
+  dataMode: 'replay',
   lastUpdated: '10 Sep 2026, 14:32 IST',
   rainfall: {
     current: '18.4 mm',

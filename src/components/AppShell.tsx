@@ -5,11 +5,12 @@ export type View = 'dashboard' | 'priorities' | 'status';
 
 interface Props {
   view: View;
+  dataMode: 'replay' | 'live' | 'unknown';
   onNavigate: (view: View) => void;
   children: React.ReactNode;
 }
 
-export function AppShell({ view, onNavigate, children }: Props) {
+export function AppShell({ view, dataMode, onNavigate, children }: Props) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const navItems = [
     { id: 'dashboard' as const, label: 'Risk dashboard', Icon: LayoutDashboard },
@@ -30,7 +31,7 @@ export function AppShell({ view, onNavigate, children }: Props) {
           <div><div className="brand-name">FloodSense</div><div className="brand-subtitle">Pune flood-risk intelligence</div></div>
         </div>
         <div className="header-context">
-          <span className="demo-pill"><span className="demo-dot" />Demo data</span>
+          <span className="demo-pill"><span className="demo-dot" />{dataMode === 'replay' ? 'Replay data' : dataMode === 'live' ? 'Live data' : 'Data mode unknown'}</span>
           <span className="header-location"><ShieldCheck size={16} /> Pune, Maharashtra</span>
           <button className="mobile-menu" onClick={() => setMobileOpen(!mobileOpen)} aria-label="Toggle navigation">
             {mobileOpen ? <X size={20} /> : <Menu size={20} />}
@@ -49,7 +50,7 @@ export function AppShell({ view, onNavigate, children }: Props) {
           </nav>
           <div className="sidebar-note">
             <div className="note-title">Model output, not an official warning</div>
-            <div>Use risk states to prioritize human attention. Data shown here is placeholder demo data.</div>
+            <div>Use risk states to prioritize human attention. Risk outputs are not official warnings.</div>
           </div>
         </aside>
         <main className="main-content">{children}</main>

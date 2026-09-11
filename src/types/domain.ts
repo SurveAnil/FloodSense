@@ -28,6 +28,7 @@ export interface DashboardData {
   locations: RiskLocation[];
   sources: DataSourceStatus[];
   lastUpdated: string;
+  dataMode: 'replay' | 'live' | 'unknown';
   rainfall: {
     current: string;
     forecast: string;
