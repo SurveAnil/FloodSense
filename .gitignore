@@ -3,3 +3,6 @@ dist/
 .env
 .env.local
 .vercel/
+backend/.venv/
+__pycache__/
+*.pyc
