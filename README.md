@@ -125,16 +125,6 @@ high-volume map traffic should configure a compliant tile host/provider.
 Satellite, terrain, and weather overlays are unavailable and are disabled in
 the UI. The Leaflet client does not require an API token.
 
-## Documentation
-
-- [PRD.md](./PRD.md)
-- [TRD.md](./TRD.md)
-- [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md)
-- [Design.md](./Design.md)
-- [DECISIONS.md](./DECISIONS.md)
-- [Project_Report.md](./Project_Report.md)
-- [AUDIT_BASELINE.md](./AUDIT_BASELINE.md)
-
 ## Summary
 
 FloodSense is being delivered feature-by-feature as integrated vertical slices.
