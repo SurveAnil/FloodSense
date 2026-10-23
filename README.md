@@ -1,98 +1,143 @@
-# FloodSense
+﻿# FloodSense
 
-## AI-Based Urban Flood Risk Forecasting for Pune
+## Current project status
 
-FloodSense is a proposed AI-driven urban flood-risk intelligence system for Pune, Maharashtra. It combines rainfall and forecast information with historical waterlogging hotspots and available spatial or drainage data to estimate where disruptive urban flooding is most likely and help response teams prioritize action.
+FloodSense is a Pune-focused urban flood-risk decision-support application. The
+current implementation provides a shared, authenticated risk dashboard and a
+human-reviewed report-to-official-problem workflow for three application
+roles, using local replay/mock risk data.
 
-The project is designed as an intelligence layer over existing systems such as IMD, CWC, and PMC data. It does not replace official weather, hydrological, or emergency-warning services.
+This is not a production weather or hydrology system, and it does not claim to provide official alerts, emergency warnings, or a validated ML forecast.
 
-## Problem
+## What the project does today
 
-During intense rainfall, Pune can experience localized flooding and waterlogging that disrupt roads, transport, public services, and emergency access. Decision-makers need more than a broad rainfall warning: they need to know which locations are most likely to be affected and which locations should receive attention first.
+The app currently provides:
 
-## Proposed workflow
+- a city-level risk summary for selected Pune locations
+- a risk map and hotspot selection flow
+- a priority hotspot list ranked by demo risk score
+- a location detail view with rainfall context and risk drivers
+- a source-status panel for IMD, CWC, PMC, and GIS
+- account sign-in with backend-assigned roles: `CITIZEN`,
+  `FIELD_RESPONSE_PLANNING`, and `DISASTER_MANAGEMENT_ADMIN`
+- an admin-only account provisioning screen
+- persisted local location and `RiskPrediction` records
+- citizen flood reports with private owner-only tracking and optional evidence
+- field verification records linked to citizen reports
+- independent field inspections linked optionally to an AI prediction or
+  citizen report, including “Inspected — No Problem Found”
+- admin review of citizen and field evidence; only explicit approval creates a
+  separate official `FloodProblem`
+- admin response instructions and field-assigned `ResponseTask` lifecycle
+- role-scoped prediction history and field-outcome analytics, with public-safe
+  aggregates for citizens and no accuracy claims
+- replay model input contributions and explicit replay/source-status labels
+- interactive Leaflet risk map with OpenStreetMap street tiles and
+  independently toggleable authorized report/observation/problem layers
 
-```text
-Data ingestion
-    -> Validation and normalization
-    -> Spatio-temporal feature engineering
-    -> AI flood-risk prediction
-    -> Hotspot prioritization
-    -> GIS decision-support dashboard
-```
+Risk values remain replay/demo model outputs. Risk predictions, reports, field
+observations, and official problems are distinct persisted records. Citizen
+reports and field findings never automatically become official problems.
 
-The system is expected to integrate:
+## Important scope boundaries
 
-- IMD rainfall observations, forecasts, and nowcasts
-- CWC hydrological or flood information where relevant
-- PMC historical waterlogging and flood-prone locations
-- GIS, terrain, drainage, and urban spatial data where accessible
+The current repo does not yet include:
 
-## Intended users
+- live IMD/CWC/PMC API integration
+- official emergency alerts or dispatch workflows
+- production ML model training or inference
+- real GIS layers or operational map services
+- satellite, terrain, and rainfall/weather map overlays
+- live monitoring, alerting, or deployment automation
+- live weather and hydrology feeds or dynamically refreshed source freshness
+- a validated evaluation dataset or methodology for model-performance metrics
 
-- Municipal disaster-management officers
-- Field-response and drainage-maintenance teams
-- Traffic-management teams
-- Emergency coordinators
+## Runtime
 
-## Product output
-
-- Location-specific flood-risk scores
-- Risk categories and ranked hotspots
-- Risk-driver explanations
-- Map-based visualization of predicted risk, observed rainfall, and historical hotspots
-- Data freshness and source-status indicators
-
-Risk predictions are decision-support outputs, not guarantees of flooding or official emergency declarations.
-
-## Project status
-
-### Phase 1 — Frontend demo (current)
-
-The current app is a deployable React + Tailwind dashboard using realistic Pune placeholder data. It includes:
-
-- Flood Risk Dashboard with a risk summary, placeholder GIS map, priority panel, and rainfall context
-- Priority Hotspots ranked table with keyboard-accessible row selection
-- Location Detail with clearly separated observed versus predicted information
-- Data Status view for IMD, CWC, PMC, and GIS source states
-
-All scores, rainfall values, timestamps, source states, and map positions are mock/demo values. They are not validated predictions, live data, official alerts, or evidence of street-level precision.
-
-Run locally:
+Install dependencies:
 
 ```bash
 npm install
+```
+
+Run the backend locally (PowerShell):
+
+```bash
+cd backend
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+$env:FLOODSENSE_DEMO_MODE = "true"
+uvicorn app.main:app --reload
+```
+
+For real account sign-in, provision an initial account from the trusted backend
+environment. The role is assigned during account provisioning, never selected
+on the real sign-in form:
+
+```powershell
+cd backend
+python -m app.cli --email admin@example.org --role DISASTER_MANAGEMENT_ADMIN
+```
+
+Run the frontend in a second terminal:
+
+```powershell
 npm run dev
 ```
 
-Build for deployment:
+Build the frontend:
 
 ```bash
 npm run build
 npm run preview
 ```
 
-Configuration is documented in `.env.example`. The current `src/services/data-service.ts` exposes a small data-service interface backed by `src/mock-data/`; Phase 2 can replace that implementation with verified IMD/CWC/PMC/GIS adapters without changing page components.
+Run the backend regression tests from `backend`:
 
-### Planned next phases
+```powershell
+python -m unittest discover -s tests -v
+```
 
-- **Phase 2:** Verify data access and replace mock service with normalized source adapters, validation, freshness, and provenance.
-- **Phase 3:** Add the historical training dataset, baseline model, evaluation, model versioning, and prediction service.
+## Data model and current implementation
 
-Known limitations include a placeholder map (no live GIS tiles), no backend/API, no authentication, no ML model, no real-time refresh, and no production monitoring.
+The backend loads demo/replay data from:
+
+- `backend/data/pune_replay.json`
+
+On first startup, the backend initializes a local SQLite database at
+`backend/data/floodsense.sqlite3` (override with `FLOODSENSE_DB_PATH`) and stores
+the replay locations and risk predictions. Demo-account sign-in controls are
+available only when `FLOODSENSE_DEMO_MODE=true`; the real email/password
+authentication flow never accepts a role from the client. Set
+`FLOODSENSE_COOKIE_SECURE=true` behind HTTPS in deployment. If the deployed
+frontend and API are on different sites, use
+`FLOODSENSE_COOKIE_SAMESITE=none` together with secure cookies and explicitly
+allow the frontend origin. Keep the frontend and API on the same hostname for
+the default local `SameSite=Lax` cookie behavior.
+
+The active data mode is `replay`; risk values are illustrative model outputs,
+not validated forecasts or official warnings.
+
+The street map uses the OpenStreetMap standard tile service with visible
+attribution. That public service is subject to its tile usage policy and does
+not provide a production availability guarantee; deployments with sustained or
+high-volume map traffic should configure a compliant tile host/provider.
+Satellite, terrain, and weather overlays are unavailable and are disabled in
+the UI. The Leaflet client does not require an API token.
 
 ## Documentation
 
-- [Product Requirements Document](https://github.com/SurveAnil/FloodSense/blob/master/PRD.md)
-- [Technical Requirements Document](https://github.com/SurveAnil/FloodSense/blob/master/TRD.md)
-- [Design Brief](https://github.com/SurveAnil/FloodSense/blob/master/Design.md)
-- [Project Report](https://github.com/SurveAnil/FloodSense/blob/master/Project_Report.md)
-- [Audit Baseline](https://github.com/SurveAnil/FloodSense/blob/master/AUDIT_BASELINE.md)
+- [PRD.md](./PRD.md)
+- [TRD.md](./TRD.md)
+- [IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md)
+- [Design.md](./Design.md)
+- [DECISIONS.md](./DECISIONS.md)
+- [Project_Report.md](./Project_Report.md)
+- [AUDIT_BASELINE.md](./AUDIT_BASELINE.md)
 
-## Scope
+## Summary
 
-The initial scope is deliberately focused on urban flooding caused by extreme rainfall in Pune:
-
-> Data → Risk intelligence → Location prioritization → Action
-
-The project does not attempt to rebuild weather forecasting infrastructure, replace existing government warning systems, or provide a generic multi-hazard platform.
+FloodSense is being delivered feature-by-feature as integrated vertical slices.
+The four-phase roadmap and acceptance criteria are in
+[IMPLEMENTATION_PLAN.md](./IMPLEMENTATION_PLAN.md). It is not yet a live
+operational forecasting or emergency-response system.

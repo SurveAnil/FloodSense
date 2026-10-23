@@ -1,18 +1,33 @@
-# Version 2 decisions
+﻿# Decision Log
 
-## 2026-09-11
+## Current implementation decisions
 
-| Decision | Default | Reasoning | Revisit when |
-| --- | --- | --- | --- |
-| Development data mode | Versioned local replay snapshot | No verified provider credentials/contracts are present; reproducible local tests are safer than invented live integrations. | IMD/CWC/PMC access and schemas are confirmed. |
-| API shape | `GET /api/dashboard`, `/api/data/status`, `/api/locations/{id}`, `/api/priorities` | Matches the existing frontend service output and keeps the Phase 1 UI boundary stable. | Real API pagination or job semantics require expansion. |
-| Prediction spatial unit | Selected named locations from replay data | The audit left grid/ward/road/hotspot unresolved; named locations avoid claiming unsupported street-level precision. | Verified geometry and event coverage support another unit. |
-| Prediction horizon | `10 Sep 2026, 15:00-18:00 IST` replay window | The audit left horizon TBD; a visible three-hour window makes the demo semantics explicit without claiming a production horizon. | Source cadence and event timestamps are analyzed. |
-| Baseline model | Logistic regression with deterministic replay feature rows | Required baseline from the TRD; interpretable and light enough for local development. | Validated historical labels justify candidate comparison. |
-| Risk thresholds | Low <35, Moderate 35-54, High 55-74, Critical >=75 | Temporary, monotonic demo thresholds that preserve four UI states. | Calibrated validation data and operational cost analysis are available. |
-| Missing optional GIS | Preserve `Unavailable`; do not impute safety | Existing product rule says missing data must not become low risk. | GIS contract and feature dependency are verified. |
-| Baseline feature vector | Current rainfall, forecast rainfall, historical hotspot indicator, and terrain signal in a fixed order | These are the only normalized fields available in the replay snapshot and keep the first model interpretable. | Confirmed source history, spatial geometry, and validated labels support additional features. |
+| Decision | Status |
+| --- | --- |
+| Use a Pune-focused flood-risk dashboard prototype | Implemented |
+| Prioritize a simple operational dashboard over a production forecasting system | Implemented |
+| Use local replay data for initial demonstration | Implemented |
+| Limit risk categories to Low / Moderate / High / Critical | Implemented |
+| Show data-source health for IMD, CWC, PMC, and GIS | Implemented |
+| Treat outputs as demo/model outputs rather than official warnings | Implemented |
+| Persist shared locations and risk predictions in local SQLite | Implemented for Phase 1 |
+| Store exactly one role on each user account | Implemented for Phase 1 |
+| Derive real-login role from the backend account | Implemented for Phase 1 |
+| Gate role-selectable demo login behind explicit demo mode | Implemented for Phase 1 |
+| Show missing or stale source state explicitly | Implemented |
 
-## Provider integration note
+## Deferred scope
 
-IMD, CWC, PMC, and GIS now have explicit normalized adapter contracts with replay-backed implementations. No credentials, endpoint behavior, or live response schema has been invented; the replay implementation remains the only active provider.
+The following items are intentionally not part of the current repository scope and should not be treated as implemented capabilities:
+
+- live IMD, CWC, or PMC integrations
+- real hydrological or meteorological model deployment
+- production-grade GIS analysis
+- automated response or emergency dispatch
+- citizen report, field verification, and official problem workflows
+- response tasks and public incident-status updates
+- public alerting or autonomous emergency response
+
+## Removed from active scope
+
+Older, broader multi-hazard and platform-level concepts have been narrowed to the current demo dashboard scope. The repo does not claim end-to-end forecasting, live alerting, or operational control systems.
