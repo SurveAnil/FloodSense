@@ -50,6 +50,24 @@ class RiskModel:
             coordinates=tuple(record["coordinates"]),
         )
 
+    def explain(self, record: dict[str, Any]) -> list[dict[str, float | str]]:
+        features = build_feature_vector(record)[0]
+        coefficients = self._model.coef_[0]
+        explanations = []
+        for name, value, coefficient in zip(self.FEATURE_NAMES, features, coefficients):
+            contribution = float(value * coefficient)
+            explanations.append({
+                "feature": name,
+                "input_value": float(value),
+                "logit_contribution": contribution,
+                "interpretation": (
+                    "increases" if contribution > 0
+                    else "decreases" if contribution < 0
+                    else "neutral"
+                ),
+            })
+        return explanations
+
     @staticmethod
     def _category(score: int) -> str:
         if score >= 75:

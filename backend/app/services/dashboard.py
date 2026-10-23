@@ -3,6 +3,7 @@ from app.adapters.provider_replay import build_replay_provider_adapters
 from app.adapters.contracts import ProviderSnapshot
 from app.ml.risk_model import RiskModel
 from app.models import (
+    MODEL_VERSION,
     DashboardResponse,
     DataSourceStatus,
     LocationResponse,
@@ -59,6 +60,7 @@ class DashboardService:
             rainfall=RainfallContext(**snapshot["rainfall"]),
             sources=self.source_status().sources,
             locations=self._locations(),
+            model_version=MODEL_VERSION,
         )
 
     def location(self, location_id: str) -> LocationResponse | None:
