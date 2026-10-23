@@ -3,3 +3,9 @@ dist/
 .env
 .env.local
 .vercel/
+backend/.venv/
+backend/data/*.sqlite3
+backend/data/*.sqlite3-shm
+backend/data/*.sqlite3-wal
+__pycache__/
+*.pyc

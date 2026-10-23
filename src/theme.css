@@ -1,0 +1,573 @@
+:root {
+  --primary: #2563eb;
+  --primary-hover: #1d4ed8;
+  --navy: #14264f;
+  --page: #f5f7fb;
+  --surface: #ffffff;
+  --border: #dce3ee;
+  --muted: #64748b;
+  --success: #15803d;
+  --warning: #d97706;
+  --error: #dc2626;
+  --risk-low: #15803d;
+  --risk-moderate: #eab308;
+  --risk-high: #d97706;
+  --risk-critical: #dc2626;
+  --ink: var(--navy);
+  --canvas: var(--page);
+  --line: var(--border);
+  --surface-muted: #f8faff;
+  --focus-ring: #2563eb;
+  color: var(--navy);
+  background: var(--page);
+  color-scheme: light;
+}
+
+body,
+.min-h-screen.bg-canvas {
+  background: var(--page);
+  color: var(--navy);
+}
+
+h1,
+h2,
+h3,
+h4,
+.brand-name,
+.note-title,
+.summary-head h2,
+.panel-header h2,
+.analytics-header h1,
+.auth-card h1,
+.report-card-heading h3,
+.response-task-card h2 {
+  color: var(--navy);
+}
+
+.app-header {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+.brand-mark {
+  background: var(--navy);
+}
+
+.brand-subtitle,
+.header-context,
+.header-user,
+.logout-button,
+.sidebar-label,
+.eyebrow,
+.section-kicker,
+.page-heading p,
+.last-updated,
+.summary-source,
+.map-meta,
+.panel-header p,
+.summary-risk span,
+.table-time,
+.priority-table td small,
+.tile-provider-note,
+.map-source-freshness,
+.weather-layer-unavailable,
+.analytics-header p,
+.analytics-cards span,
+.analytics-period,
+.analytics-location-heading > div > span,
+.analytics-location-stats,
+.analytics-empty,
+.auth-card > p,
+.report-form-panel > p,
+.report-section-heading > span,
+.report-card > small,
+.report-muted,
+.evidence-list small,
+.response-task-card small {
+  color: var(--muted);
+}
+
+.app-body {
+  background: var(--page);
+}
+
+.sidebar {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+.nav-item {
+  color: var(--muted);
+}
+
+.nav-item:hover {
+  color: var(--navy);
+  background: #f1f5fb;
+}
+
+.nav-item-active {
+  color: var(--primary);
+  background: #eff4ff;
+}
+
+.sidebar-note,
+.summary-card,
+.panel,
+.rainfall-strip,
+.analytics-cards article,
+.comparison-panel,
+.analytics-location,
+.report-card {
+  background: var(--surface);
+  border-color: var(--border);
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgb(20 38 79 / 4%);
+}
+
+.sidebar-note,
+.summary-risk,
+.comparison-panel dl div,
+.prediction-history-item,
+.report-update-form,
+.nested-report-form,
+.report-history,
+.detail-coordinates {
+  background: var(--surface-muted);
+  border-color: var(--border);
+}
+
+.summary-risk:hover {
+  border-color: var(--primary);
+}
+
+.summary-risk,
+.priority-table,
+.priority-table th,
+.priority-table td,
+.report-tabs,
+.report-card details,
+.report-history,
+.observation-list,
+.observation-list li,
+.feature-explanation-list,
+.feature-explanation-list li {
+  border-color: var(--border);
+}
+
+.priority-table th,
+.priority-table td {
+  color: var(--navy);
+}
+
+.priority-table tbody tr:hover {
+  background: #f8faff;
+}
+
+.priority-panel .table-wrap,
+.table-wrap {
+  border-radius: 7px;
+}
+
+.primary-button,
+.response-form button[type="submit"],
+.task-update-form button[type="submit"] {
+  background: var(--primary);
+  color: var(--surface);
+}
+
+.primary-button:hover,
+.response-form button[type="submit"]:hover,
+.task-update-form button[type="submit"]:hover {
+  background: var(--primary-hover);
+}
+
+.secondary-button,
+.icon-button,
+.analytics-error button,
+.map-feature-error button,
+.demo-account-list button {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--navy);
+}
+
+.secondary-button:hover,
+.icon-button:hover,
+.demo-account-list button:hover {
+  border-color: var(--primary);
+  background: #f8faff;
+}
+
+.text-button,
+.back-link,
+.status-banner button,
+.evidence-list a,
+.report-tabs button[aria-selected="true"] {
+  color: var(--primary);
+}
+
+.report-tabs button[aria-selected="true"] {
+  border-color: var(--primary);
+}
+
+button,
+a,
+select,
+input,
+textarea,
+summary {
+  accent-color: var(--primary);
+}
+
+button:focus-visible,
+tr:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+  outline: 3px solid rgb(37 99 235 / 35%);
+  outline-offset: 2px;
+}
+
+.auth-page {
+  background: var(--page);
+}
+
+.auth-card,
+.admin-form-panel,
+.report-form-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 8px 28px rgb(20 38 79 / 7%);
+}
+
+.auth-form label,
+.nested-report-form label,
+.review-controls label,
+.basemap-select,
+.map-layer-controls label,
+.report-card summary {
+  color: var(--navy);
+}
+
+.auth-form input,
+.auth-form select,
+.report-form input,
+.report-form select,
+.report-form textarea,
+.report-update-form input,
+.report-update-form select,
+.report-update-form textarea,
+.nested-report-form input,
+.nested-report-form select,
+.nested-report-form textarea,
+.review-controls input,
+.review-controls select,
+.response-form input,
+.response-form select,
+.response-form textarea,
+.task-update-form input,
+.task-update-form select,
+.task-update-form textarea,
+.map-search,
+.map-search input,
+.basemap-select select {
+  background: var(--surface);
+  border-color: var(--border);
+  border-radius: 8px;
+  color: var(--navy);
+}
+
+.primary-button,
+.secondary-button,
+.icon-button,
+.analytics-error button,
+.map-feature-error button,
+.demo-account-list button {
+  border-radius: 8px;
+}
+
+.loading-screen {
+  background: var(--page);
+  color: var(--muted);
+}
+
+[role="dialog"],
+dialog {
+  color: var(--navy);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: 0 12px 36px rgb(20 38 79 / 16%);
+}
+
+.auth-form input:focus,
+.auth-form select:focus,
+.map-search:focus-within {
+  border-color: var(--primary);
+  outline-color: rgb(37 99 235 / 22%);
+}
+
+.auth-form input::placeholder,
+.report-form input::placeholder,
+.report-form textarea::placeholder,
+.map-search input::placeholder {
+  color: var(--muted);
+}
+
+.demo-account-list button:hover {
+  background: #f8faff;
+}
+
+.status-banner,
+.analytics-mode,
+.demo-pill {
+  background: #fff8eb;
+  border-color: #f2d6a0;
+  color: #8a4b08;
+}
+
+.status-banner.subtle,
+.map-empty-state,
+.map-loading-banner {
+  background: var(--surface);
+  border-color: var(--border);
+  color: var(--muted);
+}
+
+.status-banner.subtle strong,
+.analytics-period strong,
+.note-title {
+  color: var(--navy);
+}
+
+.demo-dot {
+  background: var(--warning);
+}
+
+.analytics-mode.mode-live,
+.form-success,
+.status-verified,
+.status-approved,
+.status-open,
+.official-problem-note {
+  background: #edf8f0;
+  border-color: #b9dfc3;
+  color: var(--success);
+}
+
+.form-error,
+.analytics-error,
+.map-feature-error,
+.app-error,
+.status-not-verified,
+.status-rejected {
+  background: #fff1f1;
+  border-color: #f1c2c2;
+  color: #b91c1c;
+}
+
+.analytics-error button,
+.map-feature-error button {
+  color: #b91c1c;
+}
+
+.status-pending-verification,
+.status-pending-review,
+.analytics-notice,
+.tile-error-banner {
+  background: #fff8eb;
+  border-color: #f2d6a0;
+  color: #8a4b08;
+}
+
+.status-needs-information {
+  background: #eff4ff;
+  color: var(--primary-hover);
+}
+
+.map-search {
+  border-radius: 8px;
+}
+
+.map-layer-controls {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+.map-layer-controls input {
+  accent-color: var(--primary);
+}
+
+.map-summary-cards article {
+  background: var(--surface);
+  border-color: var(--border);
+  border-radius: 10px;
+}
+
+.map-summary-cards svg,
+.analytics-cards article svg {
+  color: var(--primary);
+}
+
+.map-summary-cards strong {
+  color: var(--navy);
+}
+
+.map-legend-gis,
+.map-coordinate-note {
+  color: var(--navy);
+}
+
+.map-coordinate-note {
+  background: rgb(255 255 255 / 94%);
+  border: 1px solid var(--border);
+}
+
+.leaflet-control-zoom a {
+  color: var(--navy) !important;
+}
+
+.leaflet-popup-content {
+  color: var(--navy);
+}
+
+.analytics-notice {
+  border-left-color: var(--warning);
+}
+
+.contribution-increases {
+  color: #c2410c;
+}
+
+.contribution-decreases {
+  color: var(--success);
+}
+
+.contribution-neutral {
+  color: var(--muted);
+}
+
+.risk-low,
+.risk-map-marker.risk-low {
+  --risk-color: #15803d;
+}
+
+.risk-moderate,
+.risk-map-marker.risk-moderate {
+  --risk-color: #a16207;
+}
+
+.risk-high,
+.risk-map-marker.risk-high {
+  --risk-color: #d97706;
+}
+
+.risk-critical,
+.risk-map-marker.risk-critical {
+  --risk-color: #dc2626;
+}
+
+.risk-map-marker.risk-low {
+  color: var(--risk-low);
+}
+
+.risk-map-marker.risk-moderate {
+  color: #a16207;
+}
+
+.risk-map-marker.risk-high {
+  color: var(--risk-high);
+}
+
+.risk-map-marker.risk-critical {
+  color: var(--risk-critical);
+}
+
+.risk-badge.risk-low {
+  color: #166534;
+  background: #edf8f0;
+}
+
+.risk-badge.risk-moderate {
+  color: #854d0e;
+  background: #fef9c3;
+}
+
+.risk-badge.risk-high {
+  color: #9a3412;
+  background: #fff1e6;
+}
+
+.risk-badge.risk-critical {
+  color: #b91c1c;
+  background: #fff1f1;
+}
+
+.legend-low {
+  background: var(--risk-low);
+}
+
+.legend-moderate {
+  background: var(--risk-moderate);
+}
+
+.legend-high {
+  background: var(--risk-high);
+}
+
+.legend-critical,
+.legend-risk-sample {
+  background: var(--risk-critical);
+  outline-color: var(--risk-critical);
+}
+
+.layer-risk {
+  background: #dc2626;
+  border-color: #fecaca;
+}
+
+.layer-citizen,
+.legend-citizen {
+  background: #2563eb;
+}
+
+.layer-field,
+.legend-field {
+  background: #6d4ba2;
+}
+
+.layer-official,
+.legend-official {
+  background: #14264f;
+}
+
+.rank {
+  background: #eef2f8;
+  color: var(--muted);
+}
+
+.rank-1 {
+  background: #fef3c7;
+  color: #854d0e;
+}
+
+.rank-2 {
+  background: #edf1f7;
+  color: #475569;
+}
+
+.rank-3 {
+  background: #ffedd5;
+  color: #9a3412;
+}
+
+@media (max-width: 700px) {
+  .sidebar {
+    background: var(--surface);
+    border-right: 1px solid var(--border);
+    box-shadow: 8px 0 24px rgb(20 38 79 / 12%);
+  }
+}

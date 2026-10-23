@@ -1,6 +1,7 @@
 import type { DashboardData } from '../types/domain';
 
 export const puneDashboardData: DashboardData = {
+  dataMode: 'replay',
   lastUpdated: '10 Sep 2026, 14:32 IST',
   rainfall: {
     current: '18.4 mm',
@@ -28,6 +29,8 @@ export const puneDashboardData: DashboardData = {
       drivers: ['High forecast rainfall', 'Recent accumulation', 'Historical waterlogging'],
       historicalHotspot: true,
       coordinates: [18.5074, 73.8077],
+      dataMode: 'replay',
+      featureExplanations: [],
     },
     {
       id: 'sinhagad',
@@ -42,6 +45,8 @@ export const puneDashboardData: DashboardData = {
       drivers: ['High forecast rainfall', 'Low-lying road segment', 'Historical waterlogging'],
       historicalHotspot: true,
       coordinates: [18.4627, 73.8271],
+      dataMode: 'replay',
+      featureExplanations: [],
     },
     {
       id: 'aundh',
@@ -56,6 +61,8 @@ export const puneDashboardData: DashboardData = {
       drivers: ['Intense nowcast signal', 'Recent accumulation', 'Drainage context unavailable'],
       historicalHotspot: false,
       coordinates: [18.559, 73.8077],
+      dataMode: 'replay',
+      featureExplanations: [],
     },
     {
       id: 'bavdhan',
@@ -70,6 +77,8 @@ export const puneDashboardData: DashboardData = {
       drivers: ['Moderate forecast rainfall', 'Terrain context available'],
       historicalHotspot: false,
       coordinates: [18.516, 73.778],
+      dataMode: 'replay',
+      featureExplanations: [],
     },
     {
       id: 'hadapsar',
@@ -84,6 +93,8 @@ export const puneDashboardData: DashboardData = {
       drivers: ['Lower forecast rainfall', 'No recent incident evidence'],
       historicalHotspot: false,
       coordinates: [18.5089, 73.926],
+      dataMode: 'replay',
+      featureExplanations: [],
     },
   ],
 };
