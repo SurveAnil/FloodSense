@@ -1,26 +1,218 @@
-import { MapPin, MousePointer2 } from 'lucide-react';
-import type { RiskLocation } from '../types/domain';
-import { RiskBadge } from './RiskBadge';
+import { useEffect, useRef, useState } from 'react';
+import {
+  CircleHelp,
+  CloudRain,
+  Map as MapIcon,
+  MapPin,
+  Waves,
+} from 'lucide-react';
+import L from 'leaflet';
+import 'leaflet/dist/leaflet.css';
+import type { DataSourceStatus, RiskLocation } from '../types/domain';
+import type { MapFeature } from '../services/map-service';
 
-export function RiskMap({ locations, selectedId, onSelect }: { locations: RiskLocation[]; selectedId?: string; onSelect: (id: string) => void }) {
+type MapLayer = 'predictions' | 'citizen' | 'field' | 'official';
+
+const initialLayers: Record<MapLayer, boolean> = {
+  predictions: true,
+  citizen: true,
+  field: true,
+  official: true,
+};
+
+const riskStyle: Record<RiskLocation['risk'], { marker: string }> = {
+  Low: { marker: 'LOW' },
+  Moderate: { marker: 'MOD' },
+  High: { marker: 'HIGH' },
+  Critical: { marker: 'CRIT' },
+};
+
+const featureStyle: Record<MapFeature['feature_type'], { color: string; symbol: string; label: string }> = {
+  CITIZEN_REPORT: { color: '#1769aa', symbol: 'R', label: 'Citizen report' },
+  FIELD_OBSERVATION: { color: '#7148a5', symbol: 'F', label: 'Field observation' },
+  OFFICIAL_PROBLEM: { color: '#263a50', symbol: '!', label: 'Official flood problem' },
+};
+
+const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
+const tileAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+
+function escapeHtml(value: string) {
+  return value.replace(/[&<>"']/g, (character) => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;',
+  })[character] ?? character);
+}
+
+function featurePopup(feature: MapFeature) {
+  const style = featureStyle[feature.feature_type];
+  const result = feature.outcome === 'INSPECTED_NO_PROBLEM_FOUND'
+    ? 'Inspected — no problem found'
+    : feature.outcome === 'PROBLEM_FOUND' ? 'Problem observed' : '';
+  return `<strong>${escapeHtml(feature.title)}</strong><br>${escapeHtml(style.label)}${result ? ` · ${escapeHtml(result)}` : ''}<br>${escapeHtml(feature.status)}<br>${escapeHtml(feature.observed_at)}`;
+}
+
+export function RiskMap({
+  locations,
+  features,
+  selectedId,
+  onSelect,
+  loadingFeatures,
+  featureError,
+  onRetryFeatures,
+  sources,
+}: {
+  locations: RiskLocation[];
+  features: MapFeature[];
+  selectedId?: string;
+  onSelect: (id: string) => void;
+  loadingFeatures: boolean;
+  featureError?: string;
+  onRetryFeatures: () => void;
+  sources: DataSourceStatus[];
+}) {
+  const mapElement = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<L.Map | null>(null);
+  const layersRef = useRef<Record<MapLayer, L.LayerGroup> | null>(null);
+  const [tileUnavailable, setTileUnavailable] = useState(false);
+  const [visible, setVisible] = useState(initialLayers);
+  const [basemap, setBasemap] = useState<'street' | 'satellite' | 'terrain'>('street');
+
+  useEffect(() => {
+    if (!mapElement.current) return;
+    const map = L.map(mapElement.current, {
+      center: [18.5204, 73.8567],
+      zoom: 11,
+      zoomControl: true,
+      scrollWheelZoom: false,
+    });
+    const tiles = L.tileLayer(tileUrl, {
+      maxZoom: 19,
+      attribution: tileAttribution,
+      crossOrigin: true,
+    });
+    tiles.on('tileerror', () => setTileUnavailable(true));
+    tiles.addTo(map);
+    mapRef.current = map;
+    layersRef.current = {
+      predictions: L.layerGroup().addTo(map),
+      citizen: L.layerGroup().addTo(map),
+      field: L.layerGroup().addTo(map),
+      official: L.layerGroup().addTo(map),
+    };
+    return () => {
+      map.remove();
+      mapRef.current = null;
+      layersRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    const groups = layersRef.current;
+    const map = mapRef.current;
+    if (!groups || !map) return;
+    Object.values(groups).forEach((group) => group.clearLayers());
+
+    for (const location of locations) {
+      if (!visible.predictions) continue;
+      const style = riskStyle[location.risk];
+      const marker = L.marker(location.coordinates, {
+        keyboard: true,
+        title: `${location.name}, ${location.risk} predicted risk, score ${location.score}`,
+        alt: `${location.risk} predicted flood risk`,
+        icon: L.divIcon({
+          className: 'risk-leaflet-icon',
+          html: `<span class="risk-map-marker risk-${location.risk.toLowerCase()}"><strong>${style.marker}</strong><small>${location.score}</small></span>`,
+          iconSize: [48, 48],
+          iconAnchor: [24, 24],
+        }),
+      });
+      marker.bindPopup(
+        `<strong>${escapeHtml(location.name)}</strong><br>${escapeHtml(location.area)} · Pune<br>${escapeHtml(location.risk)} predicted risk · ${location.score}/100<br>Prediction: ${escapeHtml(location.predictionTime)}<br>Model: ${escapeHtml(location.modelVersion ?? 'version unavailable')} · ${escapeHtml(location.dataMode)}<br>Drivers: ${escapeHtml(location.drivers.join(', ') || 'unavailable')}<br>Sources: ${escapeHtml(sources.length ? sources.map((source) => `${source.name}: ${source.state} (${source.lastUpdated})`).join('; ') : 'source freshness unavailable')}`,
+      );
+      marker.on('click', () => onSelect(location.id));
+      marker.addTo(groups.predictions);
+    }
+
+    for (const feature of features) {
+      const layerName: MapLayer = feature.feature_type === 'CITIZEN_REPORT'
+        ? 'citizen'
+        : feature.feature_type === 'FIELD_OBSERVATION' ? 'field' : 'official';
+      if (!visible[layerName]) continue;
+      const style = featureStyle[feature.feature_type];
+      const marker = L.marker([feature.latitude, feature.longitude], {
+        keyboard: true,
+        title: `${style.label}: ${feature.title}, ${feature.status}`,
+        alt: style.label,
+        icon: L.divIcon({
+          className: 'incident-leaflet-icon',
+          html: `<span class="incident-map-marker" style="--marker-color:${style.color}">${style.symbol}</span>`,
+          iconSize: [34, 34],
+          iconAnchor: [17, 17],
+        }),
+      });
+      marker.bindPopup(featurePopup(feature));
+      marker.addTo(groups[layerName]);
+    }
+  }, [features, locations, onSelect, visible]);
+
+  useEffect(() => {
+    if (!mapRef.current || !selectedId) return;
+    const location = locations.find((item) => item.id === selectedId);
+    if (location) mapRef.current.flyTo(location.coordinates, Math.max(mapRef.current.getZoom(), 13), { duration: 0.45 });
+  }, [locations, selectedId]);
+
+  const toggle = (layer: MapLayer) => {
+    setVisible((current) => ({ ...current, [layer]: !current[layer] }));
+  };
+
   return (
-    <div className="map-shell" aria-label="Pune risk map placeholder">
-      <div className="map-grid" />
-      <div className="map-river" />
-      <div className="map-label map-label-pune">PUNE</div>
-      <div className="map-label map-label-kothrud">Kothrud</div>
-      <div className="map-label map-label-aundh">Aundh</div>
-      <div className="map-label map-label-sinhagad">Sinhagad Road</div>
-      <div className="map-label map-label-hadapsar">Hadapsar</div>
-      {locations.map((location, index) => (
-        <button key={location.id} className={`map-marker marker-${location.risk.toLowerCase()} ${selectedId === location.id ? 'map-marker-selected' : ''}`} style={{ left: `${22 + (index * 15) % 60}%`, top: `${28 + ((index * 19) % 45)}%` }} onClick={() => onSelect(location.id)} aria-label={`${location.name}, ${location.risk} risk`}>
-          <span className="marker-pulse" /><MapPin size={25} fill="currentColor" />
-          <span className="marker-tooltip">{location.name}<br /><RiskBadge risk={location.risk} compact /></span>
-        </button>
-      ))}
-      <div className="map-hint"><MousePointer2 size={14} /> Select a location to view details</div>
-      <div className="map-legend"><span className="legend-title">Predicted risk</span>{(['Low', 'Moderate', 'High', 'Critical'] as const).map((risk) => <span key={risk}><i className={`legend-dot legend-${risk.toLowerCase()}`} />{risk}</span>)}</div>
-      <span className="map-placeholder-label">Interactive GIS layer<br /><small>Placeholder for Phase 1</small></span>
+    <div className="gis-map-card">
+      <div className="gis-map-toolbar">
+        <label className="basemap-select">
+          <MapIcon size={16} />
+          <span>Basemap</span>
+          <select
+            aria-label="Basemap style"
+            value={basemap}
+            onChange={(event) => setBasemap(event.target.value as typeof basemap)}
+          >
+            <option value="street">Street · OpenStreetMap</option>
+            <option value="satellite" disabled>Satellite · provider unavailable</option>
+            <option value="terrain" disabled>Terrain · provider unavailable</option>
+          </select>
+        </label>
+        <span className="tile-provider-note"><CircleHelp size={14} /> Satellite and terrain tiles are not configured.</span>
+        <span className="map-source-freshness" title={sources.map((source) => `${source.name}: ${source.state}; ${source.lastUpdated}`).join('\n')}>
+          {sources.length
+            ? sources.map((source) => `${source.name} ${source.state.toLowerCase()}`).join(' · ')
+            : 'Source freshness unavailable for this view'}
+        </span>
+      </div>
+      <fieldset className="map-layer-controls">
+        <legend>Map layers</legend>
+        <label><input type="checkbox" checked={visible.predictions} onChange={() => toggle('predictions')} /><span className="layer-symbol layer-risk" />Predicted hotspots</label>
+        <label><input type="checkbox" checked={visible.citizen} onChange={() => toggle('citizen')} /><span className="layer-symbol layer-citizen">R</span>Citizen reports</label>
+        <label><input type="checkbox" checked={visible.field} onChange={() => toggle('field')} /><span className="layer-symbol layer-field">F</span>Field observations</label>
+        <label><input type="checkbox" checked={visible.official} onChange={() => toggle('official')} /><span className="layer-symbol layer-official">!</span>Official problems</label>
+        <span className="weather-layer-unavailable"><CloudRain size={14} /> Rainfall/weather overlay unavailable</span>
+      </fieldset>
+      <div className="gis-map-frame">
+        <div ref={mapElement} className="leaflet-map" role="region" aria-label="Interactive map of Pune flood-risk predictions and authorized reports" />
+        {tileUnavailable && <div className="tile-error-banner" role="status"><Waves size={15} /> Street tiles unavailable. Markers and zoom remain usable.</div>}
+        {loadingFeatures && <div className="map-loading-banner" role="status">Loading authorized report and problem layers…</div>}
+        {featureError && <div className="map-feature-error" role="alert"><span>{featureError}</span><button type="button" onClick={onRetryFeatures}>Retry layers</button></div>}
+        {!locations.length && !features.length && !loadingFeatures && !featureError && <div className="map-empty-state">No prediction or incident locations to display.</div>}
+        <div className="map-coordinate-note"><MapPin size={12} /> WGS84 coordinates · OpenStreetMap © contributors</div>
+      </div>
+      <div className="map-legend map-legend-gis" aria-label="Map symbol legend">
+        <span><i className="legend-risk-sample risk-critical" />Predicted risk (color and score)</span>
+        <span><i className="legend-symbol legend-citizen">R</i>Citizen report</span>
+        <span><i className="legend-symbol legend-field">F</i>Field observation</span>
+        <span><i className="legend-symbol legend-official">!</i>Official problem</span>
+      </div>
     </div>
   );
 }

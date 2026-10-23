@@ -3,6 +3,7 @@ export type DataState = 'Available' | 'Stale' | 'Unavailable';
 
 export interface RiskLocation {
   id: string;
+  riskPredictionId?: string;
   name: string;
   area: string;
   risk: RiskLevel;
@@ -14,6 +15,14 @@ export interface RiskLocation {
   drivers: string[];
   historicalHotspot: boolean;
   coordinates: [number, number];
+  modelVersion?: string;
+  dataMode: 'replay' | 'live' | 'unknown';
+  featureExplanations: Array<{
+    feature: string;
+    input_value: number;
+    logit_contribution: number;
+    interpretation: 'increases' | 'decreases' | 'neutral';
+  }>;
 }
 
 export interface DataSourceStatus {
@@ -29,6 +38,7 @@ export interface DashboardData {
   sources: DataSourceStatus[];
   lastUpdated: string;
   dataMode: 'replay' | 'live' | 'unknown';
+  modelVersion?: string;
   rainfall: {
     current: string;
     forecast: string;
