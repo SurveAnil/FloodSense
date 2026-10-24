@@ -44,8 +44,18 @@ provision real users from a trusted backend environment.
    buttons should appear after the API health check reports demo mode enabled.
    Use a role button to sign in.
 
-No API key or secret is required in Vercel for this demo. Do not put backend
-secrets in `VITE_*` variables; Vite embeds those values in public browser code.
+Satellite and topographic basemaps require an ArcGIS API key. Add
+`VITE_ARCGIS_API_KEY` in Vercel **Settings** → **Environment Variables** for
+Production, Preview, and Development, then redeploy so Vite includes it in the
+build. This is a public browser key: restrict its privileges and allowed
+referrers to your application domains. Without it, ArcGIS basemaps remain
+disabled. Never put backend secrets in `VITE_*` variables; Vite embeds these
+values in public browser code.
+
+The backend retrieves current Pune weather from the public Open-Meteo API
+without a key. Its observation freshness is checked separately from the
+replay-based risk predictions; temporary provider errors or rate limits appear
+as an unavailable source status.
 
 ## 3. Verify the live connection
 

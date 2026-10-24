@@ -17,7 +17,8 @@ The app currently provides:
 - a risk map and hotspot selection flow
 - a priority hotspot list ranked by demo risk score
 - a location detail view with rainfall context and risk drivers
-- a source-status panel for IMD, CWC, PMC, and GIS
+- a source-status panel for live Open-Meteo weather freshness and replay-only
+  IMD, CWC, PMC, and GIS labels
 - account sign-in with backend-assigned roles: `CITIZEN`,
   `FIELD_RESPONSE_PLANNING`, and `DISASTER_MANAGEMENT_ADMIN`
 - an admin-only account provisioning screen
