@@ -4,9 +4,9 @@ import { arcgisBasemapAttribution, arcgisBasemapTileUrl } from './arcgis-basemap
 describe('ArcGIS basemap configuration', () => {
   it('returns authenticated imagery and topographic tile URLs', () => {
     expect(arcgisBasemapTileUrl('Imagery', ' test key '))
-      .toBe('https://basemaps-api.arcgis.com/arcgis/rest/services/styles/ArcGIS:Imagery/MapServer/tile/{z}/{y}/{x}?token=test%20key');
+      .toBe('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}?token=test%20key');
     expect(arcgisBasemapTileUrl('Topographic', 'test-key'))
-      .toBe('https://basemaps-api.arcgis.com/arcgis/rest/services/styles/ArcGIS:Topographic/MapServer/tile/{z}/{y}/{x}?token=test-key');
+      .toBe('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}?token=test-key');
   });
 
   it('does not enable ArcGIS tiles when the key is missing', () => {

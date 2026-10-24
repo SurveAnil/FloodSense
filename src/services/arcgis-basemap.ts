@@ -1,11 +1,14 @@
 export type ArcGisBasemapStyle = 'Imagery' | 'Topographic';
 
-const arcgisTileService = 'https://basemaps-api.arcgis.com/arcgis/rest/services/styles';
+const arcgisTileServices: Record<ArcGisBasemapStyle, string> = {
+  Imagery: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile',
+  Topographic: 'https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile',
+};
 
 export function arcgisBasemapTileUrl(style: ArcGisBasemapStyle, apiKey: string | undefined): string | undefined {
   const token = apiKey?.trim();
   if (!token) return undefined;
-  return `${arcgisTileService}/ArcGIS:${style}/MapServer/tile/{z}/{y}/{x}?token=${encodeURIComponent(token)}`;
+  return `${arcgisTileServices[style]}/{z}/{y}/{x}?token=${encodeURIComponent(token)}`;
 }
 
 export function arcgisBasemapAttribution(style: ArcGisBasemapStyle): string {
