@@ -1,6 +1,7 @@
 from app.adapters.replay import ReplayDataAdapter
 from app.adapters.provider_replay import build_replay_provider_adapters
 from app.adapters.contracts import ProviderSnapshot
+from app.adapters.open_meteo import OpenMeteoWeatherProvider
 from app.ml.risk_model import RiskModel
 from app.models import (
     MODEL_VERSION,
@@ -20,6 +21,7 @@ class DashboardService:
     def __init__(self) -> None:
         self.adapter = ReplayDataAdapter()
         self.providers = build_replay_provider_adapters(self.adapter)
+        self.weather_provider = OpenMeteoWeatherProvider()
         self.model = RiskModel()
         self.data_mode = self.adapter.data_mode
 
@@ -42,7 +44,22 @@ class DashboardService:
         return [
             provider.snapshot()
             for provider in self.providers.values()
-        ]
+        ] + [self.weather_provider.snapshot()]
+
+    def replay_source_status(self) -> SourceStatusResponse:
+        return SourceStatusResponse(sources=[
+            DataSourceStatus(
+                name=snapshot.source,
+                type=self._source_type(snapshot.source),
+                state=snapshot.state,
+                last_updated=snapshot.last_updated,
+                detail=snapshot.detail,
+            )
+            for snapshot in (
+                provider.snapshot()
+                for provider in self.providers.values()
+            )
+        ])
 
     @staticmethod
     def _source_type(source: str) -> str:
@@ -51,6 +68,7 @@ class DashboardService:
             "CWC": "Hydrological context",
             "PMC": "Historical hotspots",
             "GIS": "Spatial context",
+            "Open-Meteo": "Live weather observation",
         }[source]
 
     def dashboard(self) -> DashboardResponse:

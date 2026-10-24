@@ -5,10 +5,12 @@ import tempfile
 import unittest
 from http.cookies import SimpleCookie
 from pathlib import Path
+from unittest.mock import patch
 
 from fastapi import HTTPException, Response
 from fastapi.testclient import TestClient
 
+from app.adapters.contracts import ProviderSnapshot
 from app.auth import (
     Role,
     create_session,
@@ -32,6 +34,7 @@ from app.main import (
     get_priorities,
     get_risk_predictions,
     logout,
+    service,
 )
 from app.models import CreateUserRequest, DemoLoginRequest, LoginRequest
 
@@ -142,20 +145,43 @@ class PhaseOneTests(unittest.TestCase):
         self.assertEqual(fake_report_count, 0)
         self.assertEqual(fake_problem_count, 0)
 
+    def test_every_replay_location_has_a_bundled_demo_illustration(self) -> None:
+        records = service.adapter.locations()
+        project_root = Path(__file__).resolve().parents[2]
+
+        self.assertEqual(len(records), 12)
+        for record in records:
+            image_url = record["illustrativeImageUrl"]
+            image_path = project_root.joinpath("public", *image_url.lstrip("/").split("/"))
+            self.assertTrue(image_path.is_file(), f"Missing illustration for {record['id']}: {image_path}")
+            self.assertIn("NOT GROUND TRUTH", image_path.read_text(encoding="utf-8"))
+
     def test_dashboard_api_exposes_demo_scenario_context(self) -> None:
         token = create_session(self.citizen.id)
-        with TestClient(app) as client:
-            client.cookies.set("floodsense_session", token)
-            response = client.get("/api/dashboard")
+        weather = ProviderSnapshot(
+            source="Open-Meteo",
+            state="Available",
+            last_updated="2026-10-24T10:00+05:30",
+            detail="Live Open-Meteo observation; precipitation 0.2 mm, rain 0.0 mm.",
+            payload={},
+        )
+        with patch.object(service.weather_provider, "snapshot", return_value=weather):
+            with TestClient(app) as client:
+                client.cookies.set("floodsense_session", token)
+                response = client.get("/api/dashboard")
 
         self.assertEqual(response.status_code, 200)
         locations = {location["id"]: location for location in response.json()["locations"]}
         bhumkar = locations["bhumkar-chowk"]
         self.assertEqual((bhumkar["risk"], bhumkar["score"]), ("Critical", 88))
         self.assertEqual(bhumkar["coordinates"], [18.5993, 73.7578])
+        self.assertEqual(bhumkar["illustrative_image_url"], "/images/locations/bhumkar-chowk.svg")
         self.assertEqual(bhumkar["demo_context"]["citizen_report_count"], 14)
         self.assertEqual(bhumkar["demo_context"]["official_problem_status"], "Active")
         self.assertIn("not verified", bhumkar["demo_context"]["source_label"].lower())
+        sources = response.json()["sources"]
+        self.assertEqual(len(sources), 5)
+        self.assertEqual(next(source for source in sources if source["name"] == "Open-Meteo")["state"], "Available")
 
     def test_initialization_is_idempotent_and_preserves_prediction_history(self) -> None:
         with connection() as db:
@@ -288,9 +314,17 @@ class PhaseOneTests(unittest.TestCase):
         self.assertEqual(raised.exception.status_code, 401)
 
     def test_all_roles_read_the_same_persisted_risk_records(self) -> None:
-        citizen_view = get_dashboard(self.citizen)
-        field_view = get_dashboard(self.field)
-        admin_view = get_dashboard(self.admin)
+        weather = ProviderSnapshot(
+            source="Open-Meteo",
+            state="Available",
+            last_updated="2026-10-24T10:00+05:30",
+            detail="Live Open-Meteo observation.",
+            payload={},
+        )
+        with patch.object(service.weather_provider, "snapshot", return_value=weather):
+            citizen_view = get_dashboard(self.citizen)
+            field_view = get_dashboard(self.field)
+            admin_view = get_dashboard(self.admin)
         prediction_location_ids = [prediction.location_id for prediction in get_risk_predictions(self.citizen)]
         self.assertEqual(
             [location.id for location in citizen_view.locations],
@@ -301,9 +335,10 @@ class PhaseOneTests(unittest.TestCase):
             [location.id for location in admin_view.locations],
         )
         self.assertEqual(set(prediction_location_ids), {location.id for location in citizen_view.locations})
-        self.assertEqual(citizen_view.sources, [])
+        self.assertEqual(len(citizen_view.sources), 5)
+        self.assertIn("Open-Meteo", {source.name for source in citizen_view.sources})
         self.assertEqual(citizen_view.model_version, "replay-logistic-baseline-v1")
-        self.assertEqual(len(field_view.sources), 4)
+        self.assertEqual(len(field_view.sources), 5)
         self.assertEqual(field_view.model_version, "replay-logistic-baseline-v1")
         self.assertEqual(admin_view.model_version, "replay-logistic-baseline-v1")
         prediction_versions = {
@@ -362,8 +397,16 @@ class PhaseOneTests(unittest.TestCase):
         self.assertTrue(all(item.risk_category == "Critical" for item in critical.priorities))
 
     def test_source_status_is_scoped_to_operational_roles(self) -> None:
-        self.assertEqual(len(get_data_status(self.field).sources), 4)
-        self.assertEqual(len(get_data_status(self.admin).sources), 4)
+        weather = ProviderSnapshot(
+            source="Open-Meteo",
+            state="Available",
+            last_updated="2026-10-24T10:00+05:30",
+            detail="Live Open-Meteo observation.",
+            payload={},
+        )
+        with patch.object(service.weather_provider, "snapshot", return_value=weather):
+            self.assertEqual(len(get_data_status(self.field).sources), 5)
+            self.assertEqual(len(get_data_status(self.admin).sources), 5)
         self.assertEqual(
             require_role(Role.FIELD_RESPONSE_PLANNING, Role.DISASTER_MANAGEMENT_ADMIN)(self.field).role,
             Role.FIELD_RESPONSE_PLANNING,

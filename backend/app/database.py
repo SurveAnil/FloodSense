@@ -71,7 +71,8 @@ def initialize_database() -> None:
                 longitude REAL NOT NULL,
                 historical_hotspot INTEGER NOT NULL CHECK (historical_hotspot IN (0, 1)),
                 source_name TEXT NOT NULL,
-                source_reference TEXT NOT NULL
+                source_reference TEXT NOT NULL,
+                illustrative_image_url TEXT
             );
             CREATE TABLE IF NOT EXISTS demo_location_contexts (
                 location_id TEXT PRIMARY KEY REFERENCES locations(id) ON DELETE CASCADE,
@@ -315,6 +316,8 @@ def initialize_database() -> None:
         if "source_reference" not in location_columns:
             db.execute("ALTER TABLE locations ADD COLUMN source_reference TEXT NOT NULL DEFAULT ''")
             db.execute("UPDATE locations SET source_reference = id WHERE source_reference = ''")
+        if "illustrative_image_url" not in location_columns:
+            db.execute("ALTER TABLE locations ADD COLUMN illustrative_image_url TEXT")
         prediction_columns = {row["name"] for row in db.execute("PRAGMA table_info(risk_predictions)").fetchall()}
         if "feature_explanations_json" not in prediction_columns:
             db.execute("ALTER TABLE risk_predictions ADD COLUMN feature_explanations_json TEXT NOT NULL DEFAULT '[]'")
@@ -338,8 +341,9 @@ def _seed_risk_snapshot(db: sqlite3.Connection) -> None:
         db.execute(
             """
             INSERT INTO locations
-                (id, name, area, latitude, longitude, historical_hotspot, source_name, source_reference)
-            VALUES (?, ?, ?, ?, ?, ?, 'REPLAY', ?)
+                (id, name, area, latitude, longitude, historical_hotspot, source_name, source_reference,
+                 illustrative_image_url)
+            VALUES (?, ?, ?, ?, ?, ?, 'REPLAY', ?, ?)
             ON CONFLICT(id) DO UPDATE SET
                 name = excluded.name,
                 area = excluded.area,
@@ -347,7 +351,8 @@ def _seed_risk_snapshot(db: sqlite3.Connection) -> None:
                 longitude = excluded.longitude,
                 historical_hotspot = excluded.historical_hotspot,
                 source_name = excluded.source_name,
-                source_reference = excluded.source_reference
+                source_reference = excluded.source_reference,
+                illustrative_image_url = excluded.illustrative_image_url
             """,
             (
                 prediction.id,
@@ -357,6 +362,7 @@ def _seed_risk_snapshot(db: sqlite3.Connection) -> None:
                 prediction.coordinates[1],
                 int(prediction.historical_hotspot),
                 record["id"],
+                prediction.illustrative_image_url,
             ),
         )
         db.execute(
@@ -397,7 +403,7 @@ def _seed_risk_snapshot(db: sqlite3.Connection) -> None:
                     json.dumps(demo_scenario),
                 ),
             )
-    for source in service.source_status().sources:
+    for source in service.replay_source_status().sources:
         db.execute(
             """
             INSERT INTO data_sources

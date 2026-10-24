@@ -52,6 +52,7 @@ class RiskModel:
             drivers=record["drivers"],
             historical_hotspot=record["historicalHotspot"],
             coordinates=tuple(record["coordinates"]),
+            illustrative_image_url=record.get("illustrativeImageUrl"),
             model_version="mentor-demo-scenario-v1" if demo_scenario else None,
         )
 

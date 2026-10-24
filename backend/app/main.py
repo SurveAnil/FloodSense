@@ -151,6 +151,7 @@ def demo_location_context(context_json: str | None) -> DemoLocationContext | Non
 def persisted_locations(location_id: str | None = None) -> list[LocationResponse]:
     query = """
         SELECT l.id, p.id AS risk_prediction_id, l.name, l.area, l.latitude, l.longitude, l.historical_hotspot,
+               l.illustrative_image_url,
                p.risk_category, p.score, p.updated_at, p.prediction_time,
                p.current_rainfall, p.forecast_rainfall, p.drivers_json,
                p.feature_explanations_json, p.model_version, p.data_mode,
@@ -187,6 +188,7 @@ def persisted_locations(location_id: str | None = None) -> list[LocationResponse
             drivers=json.loads(row["drivers_json"]),
             historical_hotspot=bool(row["historical_hotspot"]),
             coordinates=(row["latitude"], row["longitude"]),
+            illustrative_image_url=row["illustrative_image_url"],
             model_version=row["model_version"],
             data_mode=row["data_mode"],
             feature_explanations=json.loads(row["feature_explanations_json"] or "[]"),
@@ -277,25 +279,12 @@ def create_user(
 
 
 @app.get("/api/dashboard", response_model=DashboardResponse, tags=["dashboard"])
-def get_dashboard(user: AuthenticatedUser = Depends(get_current_user)) -> DashboardResponse:
+def get_dashboard(_: AuthenticatedUser = Depends(get_current_user)) -> DashboardResponse:
     dashboard = service.dashboard()
-    with connection() as db:
-        sources = db.execute(
-            "SELECT name, source_type, state, last_updated, detail FROM data_sources ORDER BY name"
-        ).fetchall()
     return DashboardResponse(
         last_updated=dashboard.last_updated,
         rainfall=dashboard.rainfall,
-        sources=[
-            {
-                "name": row["name"],
-                "type": row["source_type"],
-                "state": row["state"],
-                "last_updated": row["last_updated"],
-                "detail": row["detail"],
-            }
-            for row in sources
-        ] if user.role != Role.CITIZEN else [],
+        sources=dashboard.sources,
         locations=persisted_locations(),
         model_version=dashboard.model_version,
     )
@@ -305,22 +294,7 @@ def get_dashboard(user: AuthenticatedUser = Depends(get_current_user)) -> Dashbo
 def get_data_status(
     _: AuthenticatedUser = Depends(require_role(Role.FIELD_RESPONSE_PLANNING, Role.DISASTER_MANAGEMENT_ADMIN)),
 ) -> SourceStatusResponse:
-    with connection() as db:
-        rows = db.execute(
-            "SELECT name, source_type, state, last_updated, detail FROM data_sources ORDER BY name"
-        ).fetchall()
-    return SourceStatusResponse(
-        sources=[
-            {
-                "name": row["name"],
-                "type": row["source_type"],
-                "state": row["state"],
-                "last_updated": row["last_updated"],
-                "detail": row["detail"],
-            }
-            for row in rows
-        ]
-    )
+    return service.source_status()
 
 
 @app.get("/api/locations", response_model=list[LocationResponse], tags=["locations"])

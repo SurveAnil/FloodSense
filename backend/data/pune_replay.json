@@ -15,11 +15,11 @@
     {"name": "GIS", "type": "Spatial context", "state": "Unavailable", "lastUpdated": "-", "detail": "Optional layer not connected"}
   ],
   "locations": [
-    {"id": "kothrud", "name": "Kothrud Depot Junction", "area": "Kothrud", "currentRainfallMm": 21.8, "forecastRainfallMm": 42, "historicalHotspot": true, "terrainSignal": 1, "updatedAt": "14:32 IST", "predictionTime": "10 Sep 2026, 15:00-18:00 IST", "drivers": ["High forecast rainfall", "Recent accumulation", "Historical waterlogging"], "coordinates": [18.5074, 73.8077]},
-    {"id": "sinhagad", "name": "Sinhagad Road Underpass", "area": "Sinhagad Road", "currentRainfallMm": 19.3, "forecastRainfallMm": 38, "historicalHotspot": true, "terrainSignal": 1, "updatedAt": "14:32 IST", "predictionTime": "10 Sep 2026, 15:00-18:00 IST", "drivers": ["High forecast rainfall", "Low-lying road segment", "Historical waterlogging"], "coordinates": [18.4627, 73.8271]},
-    {"id": "aundh", "name": "Aundh ITI Road", "area": "Aundh", "currentRainfallMm": 17.2, "forecastRainfallMm": 35, "historicalHotspot": false, "terrainSignal": 1, "updatedAt": "14:32 IST", "predictionTime": "10 Sep 2026, 15:00-18:00 IST", "drivers": ["Intense nowcast signal", "Recent accumulation", "Drainage context unavailable"], "coordinates": [18.559, 73.8077]},
-    {"id": "bavdhan", "name": "Bavdhan Link Road", "area": "Bavdhan", "currentRainfallMm": 12.1, "forecastRainfallMm": 28, "historicalHotspot": false, "terrainSignal": 1, "updatedAt": "14:32 IST", "predictionTime": "10 Sep 2026, 15:00-18:00 IST", "drivers": ["Moderate forecast rainfall", "Terrain context available"], "coordinates": [18.516, 73.778]},
-    {"id": "hadapsar", "name": "Hadapsar Market Approach", "area": "Hadapsar", "currentRainfallMm": 7.4, "forecastRainfallMm": 16, "historicalHotspot": false, "terrainSignal": 0, "updatedAt": "14:32 IST", "predictionTime": "10 Sep 2026, 15:00-18:00 IST", "drivers": ["Lower forecast rainfall", "No recent incident evidence"], "coordinates": [18.5089, 73.926]},
+    {"id": "kothrud", "name": "Kothrud Depot Junction", "area": "Kothrud", "currentRainfallMm": 21.8, "forecastRainfallMm": 42, "historicalHotspot": true, "terrainSignal": 1, "updatedAt": "14:32 IST", "predictionTime": "10 Sep 2026, 15:00-18:00 IST", "drivers": ["High forecast rainfall", "Recent accumulation", "Historical waterlogging"], "coordinates": [18.5074, 73.8077], "illustrativeImageUrl": "/images/locations/kothrud.svg"},
+    {"id": "sinhagad", "name": "Sinhagad Road Underpass", "area": "Sinhagad Road", "currentRainfallMm": 19.3, "forecastRainfallMm": 38, "historicalHotspot": true, "terrainSignal": 1, "updatedAt": "14:32 IST", "predictionTime": "10 Sep 2026, 15:00-18:00 IST", "drivers": ["High forecast rainfall", "Low-lying road segment", "Historical waterlogging"], "coordinates": [18.4627, 73.8271], "illustrativeImageUrl": "/images/locations/sinhagad.svg"},
+    {"id": "aundh", "name": "Aundh ITI Road", "area": "Aundh", "currentRainfallMm": 17.2, "forecastRainfallMm": 35, "historicalHotspot": false, "terrainSignal": 1, "updatedAt": "14:32 IST", "predictionTime": "10 Sep 2026, 15:00-18:00 IST", "drivers": ["Intense nowcast signal", "Recent accumulation", "Drainage context unavailable"], "coordinates": [18.559, 73.8077], "illustrativeImageUrl": "/images/locations/aundh.svg"},
+    {"id": "bavdhan", "name": "Bavdhan Link Road", "area": "Bavdhan", "currentRainfallMm": 12.1, "forecastRainfallMm": 28, "historicalHotspot": false, "terrainSignal": 1, "updatedAt": "14:32 IST", "predictionTime": "10 Sep 2026, 15:00-18:00 IST", "drivers": ["Moderate forecast rainfall", "Terrain context available"], "coordinates": [18.516, 73.778], "illustrativeImageUrl": "/images/locations/bavdhan.svg"},
+    {"id": "hadapsar", "name": "Hadapsar Market Approach", "area": "Hadapsar", "currentRainfallMm": 7.4, "forecastRainfallMm": 16, "historicalHotspot": false, "terrainSignal": 0, "updatedAt": "14:32 IST", "predictionTime": "10 Sep 2026, 15:00-18:00 IST", "drivers": ["Lower forecast rainfall", "No recent incident evidence"], "coordinates": [18.5089, 73.926], "illustrativeImageUrl": "/images/locations/hadapsar.svg"},
     {
       "id": "bhumkar-chowk",
       "name": "Bhumkar Chowk (Wakad / Hinjawadi Bypass)",
@@ -32,6 +32,7 @@
       "predictionTime": "10 Sep 2026, 15:00-18:00 IST",
       "drivers": ["Light-rain drainage bottleneck scenario", "Service-lane water pooling", "Highway queue spillback"],
       "coordinates": [18.5993, 73.7578],
+      "illustrativeImageUrl": "/images/locations/bhumkar-chowk.svg",
       "demoScenario": {
         "riskState": "Critical",
         "predictionScore": 88,
@@ -55,6 +56,7 @@
       "predictionTime": "10 Sep 2026, 15:00-18:00 IST",
       "drivers": ["Light-rain drainage bottleneck scenario", "Bridge approach overflow", "Metro barricade constriction"],
       "coordinates": [18.5913, 73.7389],
+      "illustrativeImageUrl": "/images/locations/shivaji-chowk-hinjawadi.svg",
       "demoScenario": {
         "riskState": "Critical",
         "predictionScore": 92,
@@ -78,6 +80,7 @@
       "predictionTime": "10 Sep 2026, 15:00-18:00 IST",
       "drivers": ["Light-rain drainage bottleneck scenario", "Unpaved shoulder runoff", "Reduced two-wheeler traction"],
       "coordinates": [18.5985, 73.7226],
+      "illustrativeImageUrl": "/images/locations/laxmi-chowk.svg",
       "demoScenario": {
         "riskState": "High",
         "predictionScore": 78,
@@ -101,6 +104,7 @@
       "predictionTime": "10 Sep 2026, 15:00-18:00 IST",
       "drivers": ["Light-rain drainage bottleneck scenario", "Low-lying underpass", "Single-lane traffic constraint"],
       "coordinates": [18.6212, 73.7481],
+      "illustrativeImageUrl": "/images/locations/punawale-underpass.svg",
       "demoScenario": {
         "riskState": "High",
         "predictionScore": 76,
@@ -124,6 +128,7 @@
       "predictionTime": "10 Sep 2026, 15:00-18:00 IST",
       "drivers": ["Light-rain drainage bottleneck scenario", "Residential gradient runoff", "Partially silted drains"],
       "coordinates": [18.5947, 73.7745],
+      "illustrativeImageUrl": "/images/locations/kasturi-chowk.svg",
       "demoScenario": {
         "riskState": "Moderate",
         "predictionScore": 58,
@@ -147,6 +152,7 @@
       "predictionTime": "10 Sep 2026, 15:00-18:00 IST",
       "drivers": ["Light-rain drainage bottleneck scenario", "Flyover ramp discharge", "Grade-level carriageway constriction"],
       "coordinates": [18.6086, 73.7794],
+      "illustrativeImageUrl": "/images/locations/dange-chowk.svg",
       "demoScenario": {
         "riskState": "High",
         "predictionScore": 72,
@@ -170,6 +176,7 @@
       "predictionTime": "10 Sep 2026, 15:00-18:00 IST",
       "drivers": ["Light-rain drainage bottleneck scenario", "Hill-slope red-soil runoff", "No stormwater channel in demo scenario"],
       "coordinates": [18.5772, 73.6934],
+      "illustrativeImageUrl": "/images/locations/maan-road.svg",
       "demoScenario": {
         "riskState": "Moderate",
         "predictionScore": 54,

@@ -5,7 +5,7 @@ from pydantic import BaseModel, Field, model_validator
 
 RiskLevel = Literal["Low", "Moderate", "High", "Critical"]
 DataState = Literal["Available", "Stale", "Unavailable"]
-SourceName = Literal["IMD", "CWC", "PMC", "GIS"]
+SourceName = Literal["IMD", "CWC", "PMC", "GIS", "Open-Meteo"]
 RoleCode = Literal["CITIZEN", "FIELD_RESPONSE_PLANNING", "DISASTER_MANAGEMENT_ADMIN"]
 MODEL_VERSION = "replay-logistic-baseline-v1"
 ReportCategory = Literal["WATERLOGGING", "FLOODING", "BLOCKED_DRAINAGE", "OVERFLOW", "OTHER"]
@@ -161,6 +161,7 @@ class LocationResponse(BaseModel):
     drivers: list[str]
     historical_hotspot: bool
     coordinates: tuple[float, float]
+    illustrative_image_url: str | None = None
     model_version: str | None = None
     data_mode: Literal["replay", "live", "unknown"] = "unknown"
     feature_explanations: list[RiskFeatureExplanation] = Field(default_factory=list)
