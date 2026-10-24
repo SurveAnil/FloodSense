@@ -33,11 +33,14 @@ The app currently provides:
   aggregates for citizens and no accuracy claims
 - replay model input contributions and explicit replay/source-status labels
 - interactive Leaflet risk map with OpenStreetMap street tiles and
-  independently toggleable authorized report/observation/problem layers
+  independently toggleable authorized report/observation/problem layers and a
+  separate demo-scenario-context layer
 
-Risk values remain replay/demo model outputs. Risk predictions, reports, field
-observations, and official problems are distinct persisted records. Citizen
-reports and field findings never automatically become official problems.
+Risk values remain replay/demo outputs; the seven mentor-demo scenario scores
+are supplied example values, not baseline-model predictions. Risk predictions,
+demo context, reports, field observations, and official problems are distinct
+records. Citizen reports and field findings never automatically become
+official problems.
 
 ## Important scope boundaries
 
@@ -122,6 +125,12 @@ the default local `SameSite=Lax` cookie behavior.
 
 The active data mode is `replay`; risk values are illustrative model outputs,
 not validated forecasts or official warnings.
+
+The replay dataset also includes seven user-supplied mentor-demo scenarios
+around Wakad, Hinjawadi, Punawale, Thergaon, and Maan. Their specified scores,
+report-count aggregates, field summaries, and issue statuses are labeled as
+demo context only; they are not imported as actual citizen submissions,
+verified field reports, or approved FloodProblems.
 
 The street map uses the OpenStreetMap standard tile service with visible
 attribution. That public service is subject to its tile usage policy and does
