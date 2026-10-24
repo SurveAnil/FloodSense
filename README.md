@@ -48,9 +48,14 @@ The current repo does not yet include:
 - production ML model training or inference
 - real GIS layers or operational map services
 - satellite, terrain, and rainfall/weather map overlays
-- live monitoring, alerting, or deployment automation
+- live monitoring, alerting, or automated CI/CD pipelines
 - live weather and hydrology feeds or dynamically refreshed source freshness
 - a validated evaluation dataset or methodology for model-performance metrics
+
+Deployment steps for a temporary Render API and Vercel mentor demo are in
+[docs/deploy-render-vercel.md](./docs/deploy-render-vercel.md). The demo
+deployment still uses replay data and ephemeral SQLite storage; it is not a
+production service.
 
 ## Runtime
 

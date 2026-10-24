@@ -1,0 +1,19 @@
+services:
+  - type: web
+    name: floodsense-api
+    runtime: python
+    plan: free
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: uvicorn app.main:app --app-dir backend --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.10
+      - key: FLOODSENSE_DB_PATH
+        value: /tmp/floodsense.sqlite3
+      - key: FLOODSENSE_DEMO_MODE
+        value: "true"
+      - key: FLOODSENSE_COOKIE_SECURE
+        value: "true"
+      - key: FLOODSENSE_COOKIE_SAMESITE
+        value: lax
