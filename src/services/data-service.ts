@@ -1,5 +1,5 @@
 import { puneDashboardData } from '../mock-data/pune';
-import { ApiError } from './auth-service';
+import { ApiError, apiBaseUrl } from './auth-service';
 import type { DashboardData, RiskLocation } from '../types/domain';
 
 export interface FloodSenseDataService {
@@ -32,8 +32,6 @@ type BackendDashboard = {
   sources: Array<{ name: 'IMD' | 'CWC' | 'PMC' | 'GIS'; type: string; state: 'Available' | 'Stale' | 'Unavailable'; last_updated: string; detail: string }>;
   locations: BackendLocation[];
 };
-
-const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
 
 const normalizeLocation = (location: BackendLocation): RiskLocation => ({
   id: location.id,

@@ -1,3 +1,13 @@
 {
-  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": "https://floodsense-api.onrender.com/api/$1"
+    },
+    {
+      "source": "/health",
+      "destination": "https://floodsense-api.onrender.com/health"
+    },
+    { "source": "/(.*)", "destination": "/" }
+  ]
 }

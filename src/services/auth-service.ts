@@ -13,7 +13,11 @@ export class ApiError extends Error {
   }
 }
 
-export const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000').replace(/\/$/, '');
+export function resolveApiBaseUrl(configuredUrl: string | undefined, isDevelopment: boolean): string {
+  return (configuredUrl?.trim() || (isDevelopment ? 'http://localhost:8000' : '')).replace(/\/$/, '');
+}
+
+export const apiBaseUrl = resolveApiBaseUrl(import.meta.env.VITE_API_BASE_URL, import.meta.env.DEV);
 
 async function parseResponse<T>(response: Response): Promise<T> {
   if (!response.ok) {
