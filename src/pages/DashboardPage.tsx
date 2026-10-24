@@ -43,7 +43,7 @@ export function DashboardPage({ data, role, onPriorityView, onRefresh, onInspect
   const visibleFeatures = features.filter((feature) =>
     !searchText || `${feature.title} ${feature.area}`.toLocaleLowerCase().includes(searchText),
   );
-  if (selected) return <LocationDetail location={selected} onBack={() => setSelectedId(undefined)} onInspect={onInspectHotspot ? () => onInspectHotspot(selected) : undefined} />;
+  if (selected) return <LocationDetail location={selected} backLabel="Back to dashboard" onBack={() => setSelectedId(undefined)} onInspect={onInspectHotspot ? () => onInspectHotspot(selected) : undefined} />;
   const refresh = async () => {
     setRefreshing(true);
     try {

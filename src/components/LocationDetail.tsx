@@ -2,9 +2,9 @@ import { ArrowLeft, CalendarClock, CheckCircle2, CloudRain, Eye, History, MapPin
 import type { RiskLocation } from '../types/domain';
 import { RiskBadge } from './RiskBadge';
 
-export function LocationDetail({ location, onBack, onInspect }: { location: RiskLocation; onBack: () => void; onInspect?: () => void }) {
+export function LocationDetail({ location, onBack, onInspect, backLabel }: { location: RiskLocation; onBack: () => void; onInspect?: () => void; backLabel: string }) {
   return <section className="detail-panel">
-    <button className="back-button" onClick={onBack}><ArrowLeft size={16} /> Back to dashboard</button>
+    <button className="back-button" onClick={onBack}><ArrowLeft size={16} /> {backLabel}</button>
     <div className="detail-heading"><div><span className="eyebrow">Selected location</span><h1>{location.name}</h1><p><MapPin size={15} /> {location.area}, Pune</p></div><RiskBadge risk={location.risk} /></div>
     {onInspect && <button className="primary-button" type="button" onClick={onInspect}>Record field inspection for this hotspot</button>}
     <div className="detail-score-row"><div><span className="eyebrow predicted-label">Predicted risk score</span><div className="detail-score">{location.score}<small>/100</small></div></div><div className="detail-time"><CalendarClock size={17} /><div><span>Prediction applies</span><strong>{location.predictionTime}</strong></div></div></div>
