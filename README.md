@@ -32,7 +32,9 @@ The app currently provides:
 - role-scoped prediction history and field-outcome analytics, with public-safe
   aggregates for citizens and no accuracy claims
 - replay model input contributions and explicit replay/source-status labels
-- interactive Leaflet risk map with OpenStreetMap street tiles and
+- live Open-Meteo current-weather freshness status, visible to every role
+- interactive Leaflet risk map with OpenStreetMap street tiles, ArcGIS imagery
+  and topographic basemaps, and
   independently toggleable authorized report/observation/problem layers and a
   separate demo-scenario-context layer
 
@@ -50,9 +52,9 @@ The current repo does not yet include:
 - official emergency alerts or dispatch workflows
 - production ML model training or inference
 - real GIS layers or operational map services
-- satellite, terrain, and rainfall/weather map overlays
+- rainfall/weather map overlays
 - live monitoring, alerting, or automated CI/CD pipelines
-- live weather and hydrology feeds or dynamically refreshed source freshness
+- live IMD/CWC/PMC feeds or dynamically refreshed freshness for those sources
 - a validated evaluation dataset or methodology for model-performance metrics
 
 Deployment steps for a temporary Render API and Vercel mentor demo are in
@@ -132,12 +134,27 @@ report-count aggregates, field summaries, and issue statuses are labeled as
 demo context only; they are not imported as actual citizen submissions,
 verified field reports, or approved FloodProblems.
 
+Location detail cards and map popups include original vector illustrations for
+all tracked locations. These are explicitly labeled as illustrative scenes,
+not ground-truth photographs; replace the SVGs under
+`public/images/locations/` with verified, licensed location photos when
+available.
+
 The street map uses the OpenStreetMap standard tile service with visible
 attribution. That public service is subject to its tile usage policy and does
 not provide a production availability guarantee; deployments with sustained or
 high-volume map traffic should configure a compliant tile host/provider.
-Satellite, terrain, and weather overlays are unavailable and are disabled in
-the UI. The Leaflet client does not require an API token.
+Satellite imagery and topographic tiles use ArcGIS basemap styles. Configure
+`VITE_ARCGIS_API_KEY` in the frontend build environment (including local `.env`
+when developing); Vite includes this key in browser code, so restrict its
+ArcGIS privileges and allowed referrers to the deployed site domains. ArcGIS
+credits are displayed in the map attribution control.
+
+Live weather freshness is fetched from Open-Meteo for central Pune and cached
+for up to five minutes. The status is based on the returned observation time;
+provider errors and observations older than one hour are surfaced as
+Unavailable or Stale. Replay risk scores and rainfall inputs remain separate
+from the live weather freshness source and are not recalculated from it.
 
 ## Summary
 
