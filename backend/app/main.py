@@ -29,6 +29,7 @@ from app.models import (
     CitizenReportUpdate,
     CitizenReportProgressResponse,
     DashboardResponse,
+    DemoLocationContext,
     DemoLoginRequest,
     FieldReportCreate,
     FieldReportResponse,
@@ -133,12 +134,27 @@ def user_response(user: AuthenticatedUser) -> UserResponse:
     return UserResponse(id=user.id, email=user.email, role=user.role.value, is_demo=user.is_demo)
 
 
+def demo_location_context(context_json: str | None) -> DemoLocationContext | None:
+    if context_json is None:
+        return None
+    scenario = json.loads(context_json)
+    return DemoLocationContext(
+        citizen_report_count=scenario["citizenReportCount"],
+        citizen_report_examples=scenario["citizenReportExamples"],
+        field_observation_summary=scenario["fieldObservationSummary"],
+        official_problem_status=scenario["officialProblemStatus"],
+        official_problem_summary=scenario["officialProblemSummary"],
+        contextual_notes=scenario["contextualNotes"],
+    )
+
+
 def persisted_locations(location_id: str | None = None) -> list[LocationResponse]:
     query = """
         SELECT l.id, p.id AS risk_prediction_id, l.name, l.area, l.latitude, l.longitude, l.historical_hotspot,
                p.risk_category, p.score, p.updated_at, p.prediction_time,
                p.current_rainfall, p.forecast_rainfall, p.drivers_json,
-               p.feature_explanations_json, p.model_version, p.data_mode
+               p.feature_explanations_json, p.model_version, p.data_mode,
+               d.context_json AS demo_context_json
         FROM locations l JOIN risk_predictions p ON p.id = (
             SELECT latest.id
             FROM risk_predictions latest
@@ -146,6 +162,7 @@ def persisted_locations(location_id: str | None = None) -> list[LocationResponse
             ORDER BY latest.created_at DESC, latest.rowid DESC
             LIMIT 1
         )
+        LEFT JOIN demo_location_contexts d ON d.location_id = l.id
     """
     parameters: tuple[str, ...] = ()
     if location_id is not None:
@@ -173,6 +190,7 @@ def persisted_locations(location_id: str | None = None) -> list[LocationResponse
             model_version=row["model_version"],
             data_mode=row["data_mode"],
             feature_explanations=json.loads(row["feature_explanations_json"] or "[]"),
+            demo_context=demo_location_context(row["demo_context_json"]),
         )
         for row in rows
     ]

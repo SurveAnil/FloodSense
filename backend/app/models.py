@@ -137,6 +137,16 @@ class DataSourceStatus(BaseModel):
     detail: str
 
 
+class DemoLocationContext(BaseModel):
+    citizen_report_count: int = Field(ge=0)
+    citizen_report_examples: list[str]
+    field_observation_summary: str
+    official_problem_status: Literal["Active", "Pending Inspection", "Monitored", "Logged"]
+    official_problem_summary: str
+    contextual_notes: str
+    source_label: str = "User-supplied demonstration scenario; not verified."
+
+
 class LocationResponse(BaseModel):
     id: str
     risk_prediction_id: str | None = None
@@ -154,6 +164,7 @@ class LocationResponse(BaseModel):
     model_version: str | None = None
     data_mode: Literal["replay", "live", "unknown"] = "unknown"
     feature_explanations: list[RiskFeatureExplanation] = Field(default_factory=list)
+    demo_context: DemoLocationContext | None = None
 
 
 class DashboardResponse(BaseModel):

@@ -19,6 +19,167 @@
     {"id": "sinhagad", "name": "Sinhagad Road Underpass", "area": "Sinhagad Road", "currentRainfallMm": 19.3, "forecastRainfallMm": 38, "historicalHotspot": true, "terrainSignal": 1, "updatedAt": "14:32 IST", "predictionTime": "10 Sep 2026, 15:00-18:00 IST", "drivers": ["High forecast rainfall", "Low-lying road segment", "Historical waterlogging"], "coordinates": [18.4627, 73.8271]},
     {"id": "aundh", "name": "Aundh ITI Road", "area": "Aundh", "currentRainfallMm": 17.2, "forecastRainfallMm": 35, "historicalHotspot": false, "terrainSignal": 1, "updatedAt": "14:32 IST", "predictionTime": "10 Sep 2026, 15:00-18:00 IST", "drivers": ["Intense nowcast signal", "Recent accumulation", "Drainage context unavailable"], "coordinates": [18.559, 73.8077]},
     {"id": "bavdhan", "name": "Bavdhan Link Road", "area": "Bavdhan", "currentRainfallMm": 12.1, "forecastRainfallMm": 28, "historicalHotspot": false, "terrainSignal": 1, "updatedAt": "14:32 IST", "predictionTime": "10 Sep 2026, 15:00-18:00 IST", "drivers": ["Moderate forecast rainfall", "Terrain context available"], "coordinates": [18.516, 73.778]},
-    {"id": "hadapsar", "name": "Hadapsar Market Approach", "area": "Hadapsar", "currentRainfallMm": 7.4, "forecastRainfallMm": 16, "historicalHotspot": false, "terrainSignal": 0, "updatedAt": "14:32 IST", "predictionTime": "10 Sep 2026, 15:00-18:00 IST", "drivers": ["Lower forecast rainfall", "No recent incident evidence"], "coordinates": [18.5089, 73.926]}
+    {"id": "hadapsar", "name": "Hadapsar Market Approach", "area": "Hadapsar", "currentRainfallMm": 7.4, "forecastRainfallMm": 16, "historicalHotspot": false, "terrainSignal": 0, "updatedAt": "14:32 IST", "predictionTime": "10 Sep 2026, 15:00-18:00 IST", "drivers": ["Lower forecast rainfall", "No recent incident evidence"], "coordinates": [18.5089, 73.926]},
+    {
+      "id": "bhumkar-chowk",
+      "name": "Bhumkar Chowk (Wakad / Hinjawadi Bypass)",
+      "area": "Wakad",
+      "currentRainfallMm": 3.2,
+      "forecastRainfallMm": 12,
+      "historicalHotspot": false,
+      "terrainSignal": 1,
+      "updatedAt": "14:32 IST",
+      "predictionTime": "10 Sep 2026, 15:00-18:00 IST",
+      "drivers": ["Light-rain drainage bottleneck scenario", "Service-lane water pooling", "Highway queue spillback"],
+      "coordinates": [18.5993, 73.7578],
+      "demoScenario": {
+        "riskState": "Critical",
+        "predictionScore": 88,
+        "citizenReportCount": 14,
+        "citizenReportExamples": ["Severe water pooling on highway service lane", "Vehicles stalled near underpass"],
+        "fieldObservationSummary": "Demo observation: surface runoff accumulation; the highway exit queue extends 1.5 km toward Tathawade.",
+        "officialProblemStatus": "Active",
+        "officialProblemSummary": "Demo issue: inadequate cross-drainage across bypass service roads.",
+        "contextualNotes": "Demo scenario: even light rain can overwhelm constrained cross-drainage, pool on the service lane, and trigger a long highway queue."
+      }
+    },
+    {
+      "id": "shivaji-chowk-hinjawadi",
+      "name": "Shivaji Chowk (Hinjawadi Phase 1)",
+      "area": "Hinjawadi",
+      "currentRainfallMm": 2.8,
+      "forecastRainfallMm": 11,
+      "historicalHotspot": false,
+      "terrainSignal": 1,
+      "updatedAt": "14:32 IST",
+      "predictionTime": "10 Sep 2026, 15:00-18:00 IST",
+      "drivers": ["Light-rain drainage bottleneck scenario", "Bridge approach overflow", "Metro barricade constriction"],
+      "coordinates": [18.5913, 73.7389],
+      "demoScenario": {
+        "riskState": "Critical",
+        "predictionScore": 92,
+        "citizenReportCount": 19,
+        "citizenReportExamples": ["Chowk inundated", "Bus lanes completely blocked near bridge"],
+        "fieldObservationSummary": "Demo observation: bridge-approach drainage overflow combines with a narrowed route around metro barricades.",
+        "officialProblemStatus": "Active",
+        "officialProblemSummary": "Demo issue: metro-pillar barricades restrict the scenario's natural stormwater path.",
+        "contextualNotes": "Demo scenario: light rain can exceed restricted bridge-approach drainage capacity; barricades leave less road space for traffic."
+      }
+    },
+    {
+      "id": "laxmi-chowk-hinjawadi",
+      "name": "Laxmi Chowk",
+      "area": "Hinjawadi / Marunji Link",
+      "currentRainfallMm": 3.4,
+      "forecastRainfallMm": 13,
+      "historicalHotspot": false,
+      "terrainSignal": 1,
+      "updatedAt": "14:32 IST",
+      "predictionTime": "10 Sep 2026, 15:00-18:00 IST",
+      "drivers": ["Light-rain drainage bottleneck scenario", "Unpaved shoulder runoff", "Reduced two-wheeler traction"],
+      "coordinates": [18.5985, 73.7226],
+      "demoScenario": {
+        "riskState": "High",
+        "predictionScore": 78,
+        "citizenReportCount": 9,
+        "citizenReportExamples": ["Slush and potholes hidden under water", "Marunji road standstill"],
+        "fieldObservationSummary": "Demo observation: water spills from unpaved shoulders onto the carriageway, creating a two-wheeler skidding hazard.",
+        "officialProblemStatus": "Pending Inspection",
+        "officialProblemSummary": "Demo issue: shoulder grading and roadside-gutter clearing are listed for inspection.",
+        "contextualNotes": "Demo scenario: light rain mobilizes loose shoulder soil and hides potholes, slowing traffic as riders avoid slippery patches."
+      }
+    },
+    {
+      "id": "punawale-highway-underpass",
+      "name": "Punawale Highway Underpass",
+      "area": "Punawale",
+      "currentRainfallMm": 2.4,
+      "forecastRainfallMm": 10,
+      "historicalHotspot": false,
+      "terrainSignal": 1,
+      "updatedAt": "14:32 IST",
+      "predictionTime": "10 Sep 2026, 15:00-18:00 IST",
+      "drivers": ["Light-rain drainage bottleneck scenario", "Low-lying underpass", "Single-lane traffic constraint"],
+      "coordinates": [18.6212, 73.7481],
+      "demoScenario": {
+        "riskState": "High",
+        "predictionScore": 76,
+        "citizenReportCount": 11,
+        "citizenReportExamples": ["Underpass submerged, small cars reversing", "Single-lane bottleneck"],
+        "fieldObservationSummary": "Demo observation: low-lying subway culvert does not drain gravity runoff; scenario water depth is 1.5 feet.",
+        "officialProblemStatus": "Active",
+        "officialProblemSummary": "Demo issue: pump-station deployment is listed as required.",
+        "contextualNotes": "Demo scenario: even light rain collects at a low point without effective gravity drainage; vehicle reversals reduce an already narrow route to a bottleneck."
+      }
+    },
+    {
+      "id": "kasturi-chowk-kaspate",
+      "name": "Kasturi Chowk (Kaspate Vasti)",
+      "area": "Wakad",
+      "currentRainfallMm": 1.6,
+      "forecastRainfallMm": 8,
+      "historicalHotspot": false,
+      "terrainSignal": 1,
+      "updatedAt": "14:32 IST",
+      "predictionTime": "10 Sep 2026, 15:00-18:00 IST",
+      "drivers": ["Light-rain drainage bottleneck scenario", "Residential gradient runoff", "Partially silted drains"],
+      "coordinates": [18.5947, 73.7745],
+      "demoScenario": {
+        "riskState": "Moderate",
+        "predictionScore": 58,
+        "citizenReportCount": 6,
+        "citizenReportExamples": ["Water stagnation at society gate", "Bypass route blocked"],
+        "fieldObservationSummary": "Demo observation: runoff from the residential gradient pools at the intersection and slows internal-bypass traffic.",
+        "officialProblemStatus": "Monitored",
+        "officialProblemSummary": "Demo issue: storm drains are described as partially choked with silt.",
+        "contextualNotes": "Demo scenario: light rain funnels down the steep residential approach to a low intersection, where partial silt blockage slows drainage."
+      }
+    },
+    {
+      "id": "dange-chowk-under-flyover",
+      "name": "Dange Chowk Under-Flyover Grade Junction",
+      "area": "Thergaon / Wakad",
+      "currentRainfallMm": 3.2,
+      "forecastRainfallMm": 12,
+      "historicalHotspot": false,
+      "terrainSignal": 1,
+      "updatedAt": "14:32 IST",
+      "predictionTime": "10 Sep 2026, 15:00-18:00 IST",
+      "drivers": ["Light-rain drainage bottleneck scenario", "Flyover ramp discharge", "Grade-level carriageway constriction"],
+      "coordinates": [18.6086, 73.7794],
+      "demoScenario": {
+        "riskState": "High",
+        "predictionScore": 72,
+        "citizenReportCount": 8,
+        "citizenReportExamples": ["Surface ponding under flyover", "Thergaon approach gridlocked"],
+        "fieldObservationSummary": "Demo observation: flyover-ramp downspouts discharge onto the grade-level carriageway.",
+        "officialProblemStatus": "Active",
+        "officialProblemSummary": "Demo issue: ramp drainage re-channeling is listed as required.",
+        "contextualNotes": "Demo scenario: concentrated ramp runoff reaches a constrained at-grade junction, reducing usable road width even in light rain."
+      }
+    },
+    {
+      "id": "maan-road-phase-3",
+      "name": "Maan Road (Phase 3 / Megapolis Approach)",
+      "area": "Maan / Hinjawadi Phase 3",
+      "currentRainfallMm": 2.2,
+      "forecastRainfallMm": 9,
+      "historicalHotspot": false,
+      "terrainSignal": 1,
+      "updatedAt": "14:32 IST",
+      "predictionTime": "10 Sep 2026, 15:00-18:00 IST",
+      "drivers": ["Light-rain drainage bottleneck scenario", "Hill-slope red-soil runoff", "No stormwater channel in demo scenario"],
+      "coordinates": [18.5772, 73.6934],
+      "demoScenario": {
+        "riskState": "Moderate",
+        "predictionScore": 54,
+        "citizenReportCount": 5,
+        "citizenReportExamples": ["Red mud runoff slick on tarmac", "Slow crawl toward tech park"],
+        "fieldObservationSummary": "Demo observation: hill-slope red soil washes across the tarmac, reducing grip; no stormwater channel is represented in this scenario.",
+        "officialProblemStatus": "Logged",
+        "officialProblemSummary": "Demo issue: a temporary soil barrier and shoulder-ditch excavation are listed as required.",
+        "contextualNotes": "Demo scenario: light rain moves loose red soil across the approach road; absent roadside channels let slick sediment spread."
+      }
+    }
   ]
 }

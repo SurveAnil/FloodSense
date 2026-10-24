@@ -34,6 +34,10 @@ class RiskModel:
         probability = float(self._model.predict_proba(features)[0, 1])
         score = max(0, min(100, round(probability * 100)))
         risk = self._category(score)
+        demo_scenario = record.get("demoScenario")
+        if demo_scenario:
+            score = int(demo_scenario["predictionScore"])
+            risk = demo_scenario["riskState"]
         updated = record["updatedAt"]
         return LocationResponse(
             id=record["id"],
@@ -48,6 +52,7 @@ class RiskModel:
             drivers=record["drivers"],
             historical_hotspot=record["historicalHotspot"],
             coordinates=tuple(record["coordinates"]),
+            model_version="mentor-demo-scenario-v1" if demo_scenario else None,
         )
 
     def explain(self, record: dict[str, Any]) -> list[dict[str, float | str]]:

@@ -73,6 +73,11 @@ def initialize_database() -> None:
                 source_name TEXT NOT NULL,
                 source_reference TEXT NOT NULL
             );
+            CREATE TABLE IF NOT EXISTS demo_location_contexts (
+                location_id TEXT PRIMARY KEY REFERENCES locations(id) ON DELETE CASCADE,
+                citizen_report_count INTEGER NOT NULL CHECK (citizen_report_count >= 0),
+                context_json TEXT NOT NULL
+            );
             CREATE TABLE IF NOT EXISTS risk_predictions (
                 id TEXT PRIMARY KEY,
                 location_id TEXT NOT NULL REFERENCES locations(id),
@@ -327,7 +332,9 @@ def _seed_risk_snapshot(db: sqlite3.Connection) -> None:
     records = {record["id"]: record for record in service.adapter.locations()}
     for prediction in service._locations():
         record = records[prediction.id]
-        feature_explanations = service.model.explain(record)
+        demo_scenario = record.get("demoScenario")
+        model_version = prediction.model_version or MODEL_VERSION
+        feature_explanations = [] if demo_scenario else service.model.explain(record)
         db.execute(
             """
             INSERT INTO locations
@@ -361,7 +368,7 @@ def _seed_risk_snapshot(db: sqlite3.Connection) -> None:
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'replay', ?)
             """,
             (
-                str(uuid.uuid5(uuid.NAMESPACE_URL, f"{prediction.id}:{prediction.prediction_time}:{MODEL_VERSION}")),
+                str(uuid.uuid5(uuid.NAMESPACE_URL, f"{prediction.id}:{prediction.prediction_time}:{model_version}")),
                 prediction.id,
                 prediction.score,
                 prediction.risk,
@@ -372,9 +379,24 @@ def _seed_risk_snapshot(db: sqlite3.Connection) -> None:
                 json.dumps(prediction.drivers),
                 json.dumps(feature_explanations),
                 utc_now(),
-                MODEL_VERSION,
+                model_version,
             ),
         )
+        if demo_scenario:
+            db.execute(
+                """
+                INSERT INTO demo_location_contexts (location_id, citizen_report_count, context_json)
+                VALUES (?, ?, ?)
+                ON CONFLICT(location_id) DO UPDATE SET
+                    citizen_report_count = excluded.citizen_report_count,
+                    context_json = excluded.context_json
+                """,
+                (
+                    prediction.id,
+                    demo_scenario["citizenReportCount"],
+                    json.dumps(demo_scenario),
+                ),
+            )
     for source in service.source_status().sources:
         db.execute(
             """

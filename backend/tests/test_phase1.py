@@ -7,6 +7,7 @@ from http.cookies import SimpleCookie
 from pathlib import Path
 
 from fastapi import HTTPException, Response
+from fastapi.testclient import TestClient
 
 from app.auth import (
     Role,
@@ -20,6 +21,7 @@ from app.auth import (
 )
 from app.database import connection, initialize_database
 from app.main import (
+    app,
     authenticate,
     create_user,
     demo_login,
@@ -97,6 +99,64 @@ class PhaseOneTests(unittest.TestCase):
         self.assertEqual(prediction_count, location_count)
         self.assertEqual(unreferenced_locations, 0)
 
+    def test_demo_location_scenarios_seed_scores_context_and_no_fake_workflow_reports(self) -> None:
+        expected = {
+            "bhumkar-chowk": ("Critical", 88, 14, "Active", (18.5993, 73.7578)),
+            "shivaji-chowk-hinjawadi": ("Critical", 92, 19, "Active", (18.5913, 73.7389)),
+            "laxmi-chowk-hinjawadi": ("High", 78, 9, "Pending Inspection", (18.5985, 73.7226)),
+            "punawale-highway-underpass": ("High", 76, 11, "Active", (18.6212, 73.7481)),
+            "kasturi-chowk-kaspate": ("Moderate", 58, 6, "Monitored", (18.5947, 73.7745)),
+            "dange-chowk-under-flyover": ("High", 72, 8, "Active", (18.6086, 73.7794)),
+            "maan-road-phase-3": ("Moderate", 54, 5, "Logged", (18.5772, 73.6934)),
+        }
+        locations = {location.id: location for location in get_locations(self.citizen)}
+        self.assertTrue(set(expected).issubset(locations))
+        for location_id, (risk, score, report_count, problem_status, coordinates) in expected.items():
+            location = locations[location_id]
+            self.assertEqual((location.risk, location.score), (risk, score))
+            self.assertEqual(location.coordinates, coordinates)
+            self.assertIsNotNone(location.demo_context)
+            self.assertEqual(location.demo_context.citizen_report_count, report_count)
+            self.assertEqual(location.demo_context.official_problem_status, problem_status)
+            self.assertTrue(location.demo_context.citizen_report_examples)
+            self.assertIn("light rain", location.demo_context.contextual_notes.lower())
+            self.assertEqual(location.model_version, "mentor-demo-scenario-v1")
+
+        with connection() as db:
+            context_count = db.execute("SELECT COUNT(*) AS n FROM demo_location_contexts").fetchone()["n"]
+            fake_report_count = db.execute(
+                "SELECT COUNT(*) AS n FROM citizen_reports WHERE location_id IN ({})".format(
+                    ",".join("?" for _ in expected)
+                ),
+                tuple(expected),
+            ).fetchone()["n"]
+            fake_problem_count = db.execute(
+                """
+                SELECT COUNT(*) AS n FROM flood_problems fp
+                JOIN citizen_reports cr ON cr.id = fp.citizen_report_id
+                WHERE cr.location_id IN ({})
+                """.format(",".join("?" for _ in expected)),
+                tuple(expected),
+            ).fetchone()["n"]
+        self.assertEqual(context_count, 7)
+        self.assertEqual(fake_report_count, 0)
+        self.assertEqual(fake_problem_count, 0)
+
+    def test_dashboard_api_exposes_demo_scenario_context(self) -> None:
+        token = create_session(self.citizen.id)
+        with TestClient(app) as client:
+            client.cookies.set("floodsense_session", token)
+            response = client.get("/api/dashboard")
+
+        self.assertEqual(response.status_code, 200)
+        locations = {location["id"]: location for location in response.json()["locations"]}
+        bhumkar = locations["bhumkar-chowk"]
+        self.assertEqual((bhumkar["risk"], bhumkar["score"]), ("Critical", 88))
+        self.assertEqual(bhumkar["coordinates"], [18.5993, 73.7578])
+        self.assertEqual(bhumkar["demo_context"]["citizen_report_count"], 14)
+        self.assertEqual(bhumkar["demo_context"]["official_problem_status"], "Active")
+        self.assertIn("not verified", bhumkar["demo_context"]["source_label"].lower())
+
     def test_initialization_is_idempotent_and_preserves_prediction_history(self) -> None:
         with connection() as db:
             prediction = db.execute("SELECT * FROM risk_predictions LIMIT 1").fetchone()
@@ -132,7 +192,7 @@ class PhaseOneTests(unittest.TestCase):
                 "SELECT source_name FROM locations WHERE id = ?",
                 (prediction["location_id"],),
             ).fetchone()["source_name"]
-        self.assertEqual(total, 6)
+        self.assertEqual(total, 13)
         self.assertEqual(old_snapshot["model_version"], "test-historical-version")
         self.assertEqual(source_name, "REPLAY")
 
@@ -246,9 +306,41 @@ class PhaseOneTests(unittest.TestCase):
         self.assertEqual(len(field_view.sources), 4)
         self.assertEqual(field_view.model_version, "replay-logistic-baseline-v1")
         self.assertEqual(admin_view.model_version, "replay-logistic-baseline-v1")
-        self.assertTrue(all(prediction.model_version == "replay-logistic-baseline-v1" for prediction in get_risk_predictions(self.citizen)))
-        self.assertTrue(all(prediction.model_version == "replay-logistic-baseline-v1" for prediction in get_risk_predictions(self.field)))
-        self.assertTrue(all(prediction.model_version == "replay-logistic-baseline-v1" for prediction in get_risk_predictions(self.admin)))
+        prediction_versions = {
+            prediction.location_id: prediction.model_version
+            for prediction in get_risk_predictions(self.citizen)
+        }
+        demo_location_ids = {
+            "bhumkar-chowk",
+            "shivaji-chowk-hinjawadi",
+            "laxmi-chowk-hinjawadi",
+            "punawale-highway-underpass",
+            "kasturi-chowk-kaspate",
+            "dange-chowk-under-flyover",
+            "maan-road-phase-3",
+        }
+        self.assertEqual(
+            {
+                version
+                for location_id, version in prediction_versions.items()
+                if location_id not in demo_location_ids
+            },
+            {"replay-logistic-baseline-v1"},
+        )
+        self.assertTrue(
+            all(
+                prediction_versions[location_id] == "mentor-demo-scenario-v1"
+                for location_id in demo_location_ids
+            )
+        )
+        for user in (self.field, self.admin):
+            self.assertEqual(
+                {
+                    prediction.location_id: prediction.model_version
+                    for prediction in get_risk_predictions(user)
+                },
+                prediction_versions,
+            )
 
     def test_authenticated_risk_and_hotspot_apis_share_latest_location_records(self) -> None:
         citizen_locations = get_locations(self.citizen)
