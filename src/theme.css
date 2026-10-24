@@ -68,6 +68,7 @@ h4,
 .summary-risk span,
 .table-time,
 .priority-table td small,
+.priority-demo-summary,
 .tile-provider-note,
 .map-source-freshness,
 .weather-layer-unavailable,
@@ -484,6 +485,30 @@ dialog {
 
 .risk-map-marker.risk-critical {
   color: var(--risk-critical);
+}
+
+.layer-demo-context,
+.legend-demo-context {
+  background: #925300;
+  border: 2px dashed #f2bd45;
+}
+
+.priority-demo-summary {
+  display: block;
+  font-size: 10px;
+  font-weight: 600;
+}
+
+.demo-scenario-context {
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 14px;
+  background: var(--surface-muted);
+}
+
+.demo-scenario-context p,
+.demo-scenario-context li {
+  line-height: 1.6;
 }
 
 .risk-badge.risk-low {

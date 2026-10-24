@@ -1,6 +1,16 @@
 export type RiskLevel = 'Low' | 'Moderate' | 'High' | 'Critical';
 export type DataState = 'Available' | 'Stale' | 'Unavailable';
 
+export interface DemoLocationContext {
+  citizenReportCount: number;
+  citizenReportExamples: string[];
+  fieldObservationSummary: string;
+  officialProblemStatus: 'Active' | 'Pending Inspection' | 'Monitored' | 'Logged';
+  officialProblemSummary: string;
+  contextualNotes: string;
+  sourceLabel: string;
+}
+
 export interface RiskLocation {
   id: string;
   riskPredictionId?: string;
@@ -23,6 +33,7 @@ export interface RiskLocation {
     logit_contribution: number;
     interpretation: 'increases' | 'decreases' | 'neutral';
   }>;
+  demoContext?: DemoLocationContext;
 }
 
 export interface DataSourceStatus {

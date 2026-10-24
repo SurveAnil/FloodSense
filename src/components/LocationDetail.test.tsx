@@ -32,4 +32,32 @@ describe('LocationDetail', () => {
 
     expect(markup).toContain('Back to priority list');
   });
+
+  it('labels supplied hotspot notes as demo context instead of verified reports', () => {
+    const markup = renderToStaticMarkup(
+      <LocationDetail
+        location={{
+          ...location,
+          demoContext: {
+            citizenReportCount: 14,
+            citizenReportExamples: ['Vehicles stalled near underpass'],
+            fieldObservationSummary: 'Demo observation: water pooling.',
+            officialProblemStatus: 'Active',
+            officialProblemSummary: 'Demo issue: drainage needs review.',
+            contextualNotes: 'Demo scenario: light rain causes congestion.',
+            sourceLabel: 'User-supplied demonstration scenario; not verified.',
+          },
+        }}
+        backLabel="Back"
+        onBack={vi.fn()}
+      />,
+    );
+
+    expect(markup).toContain('Demo scenario context — not verified');
+    expect(markup).toContain('Demo scenario score');
+    expect(markup).toContain('Scenario applies');
+    expect(markup).toContain('not an output from the baseline model');
+    expect(markup).toContain('14 mock citizen reports');
+    expect(markup).toContain('Vehicles stalled near underpass');
+  });
 });

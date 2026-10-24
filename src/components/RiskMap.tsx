@@ -11,13 +11,14 @@ import 'leaflet/dist/leaflet.css';
 import type { DataSourceStatus, RiskLocation } from '../types/domain';
 import type { MapFeature } from '../services/map-service';
 
-type MapLayer = 'predictions' | 'citizen' | 'field' | 'official';
+type MapLayer = 'predictions' | 'citizen' | 'field' | 'official' | 'demoContext';
 
 const initialLayers: Record<MapLayer, boolean> = {
   predictions: true,
   citizen: true,
   field: true,
   official: true,
+  demoContext: true,
 };
 
 const riskStyle: Record<RiskLocation['risk'], { marker: string }> = {
@@ -52,6 +53,12 @@ function featurePopup(feature: MapFeature) {
     ? 'Inspected — no problem found'
     : feature.outcome === 'PROBLEM_FOUND' ? 'Problem observed' : '';
   return `<strong>${escapeHtml(feature.title)}</strong><br>${escapeHtml(style.label)}${result ? ` · ${escapeHtml(result)}` : ''}<br>${escapeHtml(feature.status)}<br>${escapeHtml(feature.observed_at)}`;
+}
+
+function demoContextPopup(location: RiskLocation): string {
+  const context = location.demoContext;
+  if (!context) return '';
+  return `<hr><strong>DEMO SCENARIO CONTEXT — NOT VERIFIED</strong><br>${escapeHtml(context.sourceLabel)}<br>Mock citizen report count: ${context.citizenReportCount} (${context.citizenReportExamples.length} example summaries)<br>Examples: ${context.citizenReportExamples.map(escapeHtml).join(' · ')}<br>Field observation: ${escapeHtml(context.fieldObservationSummary)}<br>Mock official-problem status: ${escapeHtml(context.officialProblemStatus)} — ${escapeHtml(context.officialProblemSummary)}<br>Why light rain can cause congestion: ${escapeHtml(context.contextualNotes)}`;
 }
 
 export function RiskMap({
@@ -101,6 +108,7 @@ export function RiskMap({
       citizen: L.layerGroup().addTo(map),
       field: L.layerGroup().addTo(map),
       official: L.layerGroup().addTo(map),
+      demoContext: L.layerGroup().addTo(map),
     };
     return () => {
       map.remove();
@@ -116,12 +124,24 @@ export function RiskMap({
     Object.values(groups).forEach((group) => group.clearLayers());
 
     for (const location of locations) {
+      if (location.demoContext && visible.demoContext) {
+        L.circleMarker(location.coordinates, {
+          radius: 32,
+          color: '#925300',
+          weight: 2,
+          dashArray: '5 4',
+          fillColor: '#f2bd45',
+          fillOpacity: 0.12,
+        })
+          .bindPopup(`<strong>${escapeHtml(location.name)}</strong>${demoContextPopup(location)}`)
+          .addTo(groups.demoContext);
+      }
       if (!visible.predictions) continue;
       const style = riskStyle[location.risk];
       const marker = L.marker(location.coordinates, {
         keyboard: true,
-        title: `${location.name}, ${location.risk} predicted risk, score ${location.score}`,
-        alt: `${location.risk} predicted flood risk`,
+        title: `${location.name}, ${location.risk} risk, score ${location.score}`,
+        alt: `${location.risk} flood-risk category`,
         icon: L.divIcon({
           className: 'risk-leaflet-icon',
           html: `<span class="risk-map-marker risk-${location.risk.toLowerCase()}"><strong>${style.marker}</strong><small>${location.score}</small></span>`,
@@ -130,7 +150,7 @@ export function RiskMap({
         }),
       });
       marker.bindPopup(
-        `<strong>${escapeHtml(location.name)}</strong><br>${escapeHtml(location.area)} · Pune<br>${escapeHtml(location.risk)} predicted risk · ${location.score}/100<br>Prediction: ${escapeHtml(location.predictionTime)}<br>Model: ${escapeHtml(location.modelVersion ?? 'version unavailable')} · ${escapeHtml(location.dataMode)}<br>Drivers: ${escapeHtml(location.drivers.join(', ') || 'unavailable')}<br>Sources: ${escapeHtml(sources.length ? sources.map((source) => `${source.name}: ${source.state} (${source.lastUpdated})`).join('; ') : 'source freshness unavailable')}`,
+        `<strong>${escapeHtml(location.name)}</strong><br>${escapeHtml(location.area)} · Pune<br>${escapeHtml(location.risk)} risk · ${location.score}/100<br>${location.demoContext ? 'Scenario window' : 'Prediction window'}: ${escapeHtml(location.predictionTime)}<br>Score basis: ${escapeHtml(location.modelVersion ?? 'replay')} · ${escapeHtml(location.dataMode)} data<br>Context: ${escapeHtml(location.drivers.join(', ') || 'unavailable')}<br>Sources: ${escapeHtml(sources.length ? sources.map((source) => `${source.name}: ${source.state} (${source.lastUpdated})`).join('; ') : 'source freshness unavailable')}${demoContextPopup(location)}`,
       );
       marker.on('click', () => onSelect(location.id));
       marker.addTo(groups.predictions);
@@ -193,10 +213,11 @@ export function RiskMap({
       </div>
       <fieldset className="map-layer-controls">
         <legend>Map layers</legend>
-        <label><input type="checkbox" checked={visible.predictions} onChange={() => toggle('predictions')} /><span className="layer-symbol layer-risk" />Predicted hotspots</label>
+        <label><input type="checkbox" checked={visible.predictions} onChange={() => toggle('predictions')} /><span className="layer-symbol layer-risk" />Risk hotspots</label>
         <label><input type="checkbox" checked={visible.citizen} onChange={() => toggle('citizen')} /><span className="layer-symbol layer-citizen">R</span>Citizen reports</label>
         <label><input type="checkbox" checked={visible.field} onChange={() => toggle('field')} /><span className="layer-symbol layer-field">F</span>Field observations</label>
         <label><input type="checkbox" checked={visible.official} onChange={() => toggle('official')} /><span className="layer-symbol layer-official">!</span>Official problems</label>
+        <label><input type="checkbox" checked={visible.demoContext} onChange={() => toggle('demoContext')} /><span className="layer-symbol layer-demo-context">D</span>Demo scenario context</label>
         <span className="weather-layer-unavailable"><CloudRain size={14} /> Rainfall/weather overlay unavailable</span>
       </fieldset>
       <div className="gis-map-frame">
@@ -208,10 +229,11 @@ export function RiskMap({
         <div className="map-coordinate-note"><MapPin size={12} /> WGS84 coordinates · OpenStreetMap © contributors</div>
       </div>
       <div className="map-legend map-legend-gis" aria-label="Map symbol legend">
-        <span><i className="legend-risk-sample risk-critical" />Predicted risk (color and score)</span>
+        <span><i className="legend-risk-sample risk-critical" />Risk category (color) and score</span>
         <span><i className="legend-symbol legend-citizen">R</i>Citizen report</span>
         <span><i className="legend-symbol legend-field">F</i>Field observation</span>
         <span><i className="legend-symbol legend-official">!</i>Official problem</span>
+        <span><i className="legend-symbol legend-demo-context">D</i>Demo scenario context (not verified)</span>
       </div>
     </div>
   );
