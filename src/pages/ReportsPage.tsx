@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState, type FormEvent } from 'react';
+import { formatReportCount } from './report-count';
 import {
   reportService,
   type AdminReportQueue,
@@ -261,7 +262,7 @@ function CitizenView({
         <button className="primary-button" type="submit" disabled={busy}>Submit report</button>
       </form>
     </section>
-    <section className="report-list-section"><div className="report-section-heading"><div><span className="eyebrow">Private to your account</span><h2>My reports</h2></div><span>{reports.length} reports</span></div>
+    <section className="report-list-section"><div className="report-section-heading"><div><span className="eyebrow">Private to your account</span><h2>My reports</h2></div><span>{formatReportCount(reports.length)}</span></div>
       {reports.length === 0 ? <section className="panel report-empty">No reports yet. Your submissions will appear here.</section> : reports.map((report) =>
         <article className="panel report-card" key={report.id}>
           <div className="report-card-heading"><div><span className="eyebrow">{humanize(report.category)}</span><h3>{report.location_name}{report.area ? ` · ${report.area}` : ''}</h3></div><StatusPill status={report.status} /></div>
@@ -375,7 +376,7 @@ function FieldView({
         </article>,
       )}
     </section>
-    <section className="report-list-section"><div className="report-section-heading"><div><span className="eyebrow">Your field submissions</span><h2>My field reports</h2></div><span>{reports.length} reports</span></div>
+    <section className="report-list-section"><div className="report-section-heading"><div><span className="eyebrow">Your field submissions</span><h2>My field reports</h2></div><span>{formatReportCount(reports.length)}</span></div>
       {reports.length === 0 ? <section className="panel report-empty">No independent field reports have been recorded.</section> : reports.map((report) =>
         <article className="panel report-card" key={report.id}>
           <div className="report-card-heading"><div><span className="eyebrow">{humanize(report.category)}</span><h3>{report.location_name}{report.area ? ` · ${report.area}` : ''}</h3></div><StatusPill status={report.status} /></div>

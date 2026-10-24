@@ -23,10 +23,12 @@ export default function App() {
   const [data, setData] = useState<DashboardData>();
   const [user, setUser] = useState<AuthUser>();
   const [loading, setLoading] = useState(true);
+  const [dashboardLoading, setDashboardLoading] = useState(true);
   const [serviceError, setServiceError] = useState<string>();
   const [inspectionLocationId, setInspectionLocationId] = useState<string>();
 
   const loadRiskData = useCallback(async () => {
+    setDashboardLoading(true);
     try {
       setData(await apiDataService.getDashboardData());
       setServiceError(undefined);
@@ -36,6 +38,8 @@ export default function App() {
         setData(undefined);
       }
       setServiceError(reason instanceof Error ? reason.message : 'Risk information could not be loaded.');
+    } finally {
+      setDashboardLoading(false);
     }
   }, []);
 
@@ -82,6 +86,7 @@ export default function App() {
 
   if (loading) return <div className="loading-screen">Checking FloodSense session…</div>;
   if (!user) return <LoginPage onAuthenticated={completeSignIn} serviceError={serviceError} />;
+  if (!data && dashboardLoading) return <div className="loading-screen">Loading flood-risk information…</div>;
   if (!data) return <main className="auth-page"><section className="panel auth-card">
     <div className="form-error" role="alert">{serviceError || 'Flood-risk information is unavailable.'}</div>
     <div className="auth-recovery"><button className="primary-button" type="button" onClick={loadRiskData}>Retry</button><button className="secondary-button" type="button" onClick={signOut}>Sign out</button></div>
