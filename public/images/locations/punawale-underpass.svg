@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675">
+  <title>Illustrative submerged underpass scene for Punawale Highway</title>
+  <defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#a6cbdc"/><stop offset="1" stop-color="#e9eff1"/></linearGradient><linearGradient id="water" x2="0" y2="1"><stop stop-color="#6ac0cb"/><stop offset="1" stop-color="#216f91"/></linearGradient></defs>
+  <rect width="1200" height="675" fill="url(#sky)"/><path d="M0 355h1200v110H0z" fill="#818f90"/><path d="M50 350h1100v70H50z" fill="#4e5b60"/>
+  <path d="M120 360v155h210V360m540 0v155h210V360" fill="#4e5a60"/><path d="M330 380h540v190H330z" fill="#213744"/>
+  <path d="M0 505q235-50 470 3t730-8v175H0z" fill="url(#water)"/><path d="M85 590h180m650 0h210" stroke="#d0eced" stroke-width="10" stroke-linecap="round"/>
+  <g fill="#e8bd50" stroke="#273d48" stroke-width="8"><path d="M420 435h120l40 56H395z"/></g>
+  <path d="M0 96h1200v105H0z" fill="#142d38" opacity=".84"/><text x="50" y="139" fill="#fff" font-family="Arial,sans-serif" font-size="32" font-weight="700">Punawale Highway Underpass</text><text x="50" y="177" fill="#d4e8ed" font-family="Arial,sans-serif" font-size="22">Illustrative low-lying culvert water scene</text>
+  <rect x="782" y="582" width="368" height="48" rx="8" fill="#fff" opacity=".94"/><text x="804" y="614" fill="#7a3e00" font-family="Arial,sans-serif" font-size="20" font-weight="700">DEMO ILLUSTRATION · NOT GROUND TRUTH</text>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675">
+  <title>Illustrative hill-soil runoff scene for Maan Road</title>
+  <defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#9fcadd"/><stop offset="1" stop-color="#ebefec"/></linearGradient><linearGradient id="water" x2="0" y2="1"><stop stop-color="#72b9c3"/><stop offset="1" stop-color="#38768b"/></linearGradient></defs>
+  <rect width="1200" height="675" fill="url(#sky)"/><path d="M0 395 160 280l210 120 180-220 210 220 190-145 250 140v150H0z" fill="#6e8670"/>
+  <path d="m330 370 80-120 90 180m220-40 90-125 130 145" fill="none" stroke="#a95831" stroke-width="46" opacity=".9"/>
+  <path d="M0 455h1200v220H0z" fill="#444e51"/><path d="M0 555q280-50 520 5t680-6v121H0z" fill="url(#water)"/>
+  <path d="M95 468h1010" stroke="#e7e1cf" stroke-width="8" stroke-dasharray="40 26"/><path d="M150 435 290 452m540-18 150 18" stroke="#b86637" stroke-width="15"/>
+  <path d="M0 96h1200v105H0z" fill="#142d38" opacity=".84"/><text x="50" y="139" fill="#fff" font-family="Arial,sans-serif" font-size="32" font-weight="700">Maan Road · Phase 3</text><text x="50" y="177" fill="#d4e8ed" font-family="Arial,sans-serif" font-size="22">Illustrative hillside red-soil runoff scene</text>
+  <rect x="782" y="582" width="368" height="48" rx="8" fill="#fff" opacity=".94"/><text x="804" y="614" fill="#7a3e00" font-family="Arial,sans-serif" font-size="20" font-weight="700">DEMO ILLUSTRATION · NOT GROUND TRUTH</text>
+</svg>

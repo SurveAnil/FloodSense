@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675">
+  <title>Illustrative bridge approach and narrowed road scene for Shivaji Chowk</title>
+  <defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#a8d2e3"/><stop offset="1" stop-color="#e8efef"/></linearGradient><linearGradient id="water" x2="0" y2="1"><stop stop-color="#6fc0cd"/><stop offset="1" stop-color="#287b99"/></linearGradient></defs>
+  <rect width="1200" height="675" fill="url(#sky)"/><path d="M0 310h1200v130H0z" fill="#8c9c9b"/>
+  <path d="M75 288h1050v84H75z" fill="#59666c"/><path d="M130 375v115m180-115v115m580-115v115m180-115v115" stroke="#58666c" stroke-width="20"/>
+  <path d="M0 460h1200v215H0z" fill="#404b51"/><path d="M0 555q240-40 520 7t680-6v119H0z" fill="url(#water)"/>
+  <path d="M450 355v147m150-147v147m150-147v147" stroke="#dc724e" stroke-width="22"/><path d="M95 464h1010" stroke="#e7e1cf" stroke-width="8" stroke-dasharray="38 28"/>
+  <path d="M0 96h1200v105H0z" fill="#142d38" opacity=".84"/><text x="50" y="139" fill="#fff" font-family="Arial,sans-serif" font-size="32" font-weight="700">Shivaji Chowk · Hinjawadi</text><text x="50" y="177" fill="#d4e8ed" font-family="Arial,sans-serif" font-size="22">Illustrative bridge approach and road constriction</text>
+  <rect x="782" y="582" width="368" height="48" rx="8" fill="#fff" opacity=".94"/><text x="804" y="614" fill="#7a3e00" font-family="Arial,sans-serif" font-size="20" font-weight="700">DEMO ILLUSTRATION · NOT GROUND TRUTH</text>
+</svg>

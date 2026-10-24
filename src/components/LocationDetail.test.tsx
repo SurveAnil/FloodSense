@@ -60,4 +60,21 @@ describe('LocationDetail', () => {
     expect(markup).toContain('14 mock citizen reports');
     expect(markup).toContain('Vehicles stalled near underpass');
   });
+
+  it('labels location illustrations as non-ground-truth imagery', () => {
+    const markup = renderToStaticMarkup(
+      <LocationDetail
+        location={{
+          ...location,
+          illustrativeImageUrl: '/images/locations/test.svg',
+        }}
+        backLabel="Back"
+        onBack={vi.fn()}
+      />,
+    );
+
+    expect(markup).toContain('src="/images/locations/test.svg"');
+    expect(markup).toContain('not a verified ground-truth photo');
+    expect(markup).toContain('Replace with a location-verified image when available.');
+  });
 });

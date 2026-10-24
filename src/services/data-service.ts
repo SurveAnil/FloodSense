@@ -21,6 +21,7 @@ type BackendLocation = {
   updated_at: string; prediction_time: string; current_rainfall: string;
   forecast_rainfall: string; drivers: string[]; historical_hotspot: boolean;
   coordinates: [number, number];
+  illustrative_image_url: string | null;
   model_version: string | null; data_mode: 'replay' | 'live' | 'unknown';
   feature_explanations: RiskLocation['featureExplanations'];
   demo_context?: {
@@ -38,7 +39,7 @@ type BackendDashboard = {
   last_updated: string;
   model_version?: string | null;
   rainfall: DashboardData['rainfall'];
-  sources: Array<{ name: 'IMD' | 'CWC' | 'PMC' | 'GIS'; type: string; state: 'Available' | 'Stale' | 'Unavailable'; last_updated: string; detail: string }>;
+  sources: Array<{ name: 'IMD' | 'CWC' | 'PMC' | 'GIS' | 'Open-Meteo'; type: string; state: 'Available' | 'Stale' | 'Unavailable'; last_updated: string; detail: string }>;
   locations: BackendLocation[];
 };
 
@@ -56,6 +57,7 @@ const normalizeLocation = (location: BackendLocation): RiskLocation => ({
   drivers: location.drivers,
   historicalHotspot: location.historical_hotspot,
   coordinates: location.coordinates,
+  illustrativeImageUrl: location.illustrative_image_url ?? undefined,
   modelVersion: location.model_version ?? undefined,
   dataMode: location.data_mode,
   featureExplanations: location.feature_explanations,

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img">
+  <title>Illustrative underpass waterlogging scene for Sinhagad Road</title>
+  <defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#a8cddd"/><stop offset="1" stop-color="#e9eff1"/></linearGradient><linearGradient id="water" x2="0" y2="1"><stop stop-color="#68bdc8"/><stop offset="1" stop-color="#216f91"/></linearGradient></defs>
+  <rect width="1200" height="675" fill="url(#sky)"/><path d="M0 300 220 220l145 80 185-115 160 110 185-70 305 80v150H0z" fill="#68857e"/>
+  <path d="M0 355h1200v118H0z" fill="#a8b3b6"/><path d="M0 350h1200v40H0z" fill="#4e585d"/>
+  <path d="M100 355v210h230V355m540 0v210h230V355" fill="#535e64"/><path d="M330 370h540v205H330z" fill="#263c49"/>
+  <path d="M0 505q230-55 480 7t720-6v169H0z" fill="url(#water)"/><path d="M80 574h190m470 9h250m70-18h90" stroke="#c8e9ea" stroke-width="9" stroke-linecap="round"/>
+  <path d="M0 96h1200v105H0z" fill="#142d38" opacity=".84"/><text x="50" y="139" fill="#fff" font-family="Arial,sans-serif" font-size="32" font-weight="700">Sinhagad Road Underpass</text><text x="50" y="177" fill="#d4e8ed" font-family="Arial,sans-serif" font-size="22">Illustrative low-point water accumulation</text>
+  <rect x="782" y="582" width="368" height="48" rx="8" fill="#fff" opacity=".94"/><text x="804" y="614" fill="#7a3e00" font-family="Arial,sans-serif" font-size="20" font-weight="700">DEMO ILLUSTRATION · NOT GROUND TRUTH</text>
+</svg>

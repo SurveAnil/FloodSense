@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img">
+  <title>Illustrative rain and traffic scene for Aundh ITI Road</title>
+  <defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#a7c9da"/><stop offset="1" stop-color="#edf0ef"/></linearGradient><linearGradient id="water" x2="0" y2="1"><stop stop-color="#74c1cc"/><stop offset="1" stop-color="#3486a0"/></linearGradient></defs>
+  <rect width="1200" height="675" fill="url(#sky)"/><path d="M0 345q200-140 400 0t400 0 400 0v110H0z" fill="#829188"/>
+  <path d="M95 250h185v180H95zm230-60h220v240H325zm565 42h200v198H890z" fill="#d7b68f"/><path d="M0 435h1200v240H0z" fill="#414b52"/><path d="M0 546q320-45 600 4t600-4v129H0z" fill="url(#water)"/>
+  <path d="M145 460h270m105 110h280m100-105h180" stroke="#edf0dd" stroke-width="8" stroke-dasharray="40 28"/>
+  <g stroke="#263b45" stroke-width="8" fill="#db744b"><path d="M300 422h130l42 57H272z"/><path d="M780 423h130l42 57H752z"/></g>
+  <path d="M0 96h1200v105H0z" fill="#142d38" opacity=".84"/><text x="50" y="139" fill="#fff" font-family="Arial,sans-serif" font-size="32" font-weight="700">Aundh ITI Road</text><text x="50" y="177" fill="#d4e8ed" font-family="Arial,sans-serif" font-size="22">Illustrative rain-on-road traffic scene</text>
+  <rect x="782" y="582" width="368" height="48" rx="8" fill="#fff" opacity=".94"/><text x="804" y="614" fill="#7a3e00" font-family="Arial,sans-serif" font-size="20" font-weight="700">DEMO ILLUSTRATION · NOT GROUND TRUTH</text>
+</svg>

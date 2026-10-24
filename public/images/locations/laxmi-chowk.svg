@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675">
+  <title>Illustrative shoulder runoff scene for Laxmi Chowk</title>
+  <defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#acd5e1"/><stop offset="1" stop-color="#eef0e9"/></linearGradient><linearGradient id="water" x2="0" y2="1"><stop stop-color="#74bdc9"/><stop offset="1" stop-color="#2d7b94"/></linearGradient></defs>
+  <rect width="1200" height="675" fill="url(#sky)"/><path d="M0 380 230 280l220 120 210-160 250 145 290-110v180H0z" fill="#879681"/>
+  <path d="M0 435h1200v240H0z" fill="#454d50"/><path d="M0 522q250-42 490 8t710-2v147H0z" fill="url(#water)"/>
+  <path d="M165 420h860" stroke="#decd98" stroke-width="45" opacity=".85"/><path d="M230 454h740" stroke="#e9e4d3" stroke-width="8" stroke-dasharray="40 26"/>
+  <path d="m260 378 90 54m90-68 72 66m268-90 80 75m100-58 64 62" stroke="#9b5e37" stroke-width="17" opacity=".8"/>
+  <path d="M0 96h1200v105H0z" fill="#142d38" opacity=".84"/><text x="50" y="139" fill="#fff" font-family="Arial,sans-serif" font-size="32" font-weight="700">Laxmi Chowk</text><text x="50" y="177" fill="#d4e8ed" font-family="Arial,sans-serif" font-size="22">Illustrative shoulder runoff and slick road surface</text>
+  <rect x="782" y="582" width="368" height="48" rx="8" fill="#fff" opacity=".94"/><text x="804" y="614" fill="#7a3e00" font-family="Arial,sans-serif" font-size="20" font-weight="700">DEMO ILLUSTRATION · NOT GROUND TRUTH</text>
+</svg>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675">
+  <title>Illustrative flyover ramp runoff scene for Dange Chowk</title>
+  <defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#a9cfdf"/><stop offset="1" stop-color="#e9eeee"/></linearGradient><linearGradient id="water" x2="0" y2="1"><stop stop-color="#65b8c9"/><stop offset="1" stop-color="#267797"/></linearGradient></defs>
+  <rect width="1200" height="675" fill="url(#sky)"/><path d="M0 300h1200v180H0z" fill="#8c9998"/>
+  <path d="M0 302h1200v78H0z" fill="#555f64"/><path d="M170 348v185m260-185v185m350-185v185m260-185v185" stroke="#555f64" stroke-width="27"/>
+  <path d="M0 465h1200v210H0z" fill="#424c51"/><path d="M0 555q280-44 560 4t640-8v124H0z" fill="url(#water)"/>
+  <path d="M300 295q130 50 180 120m360-120q-90 48-125 118" fill="none" stroke="#60bdd0" stroke-width="16" stroke-linecap="round"/>
+  <path d="M95 470h1010" stroke="#eee7d2" stroke-width="8" stroke-dasharray="40 26"/>
+  <path d="M0 96h1200v105H0z" fill="#142d38" opacity=".84"/><text x="50" y="139" fill="#fff" font-family="Arial,sans-serif" font-size="32" font-weight="700">Dange Chowk Under-Flyover</text><text x="50" y="177" fill="#d4e8ed" font-family="Arial,sans-serif" font-size="22">Illustrative ramp runoff at grade level</text>
+  <rect x="782" y="582" width="368" height="48" rx="8" fill="#fff" opacity=".94"/><text x="804" y="614" fill="#7a3e00" font-family="Arial,sans-serif" font-size="20" font-weight="700">DEMO ILLUSTRATION · NOT GROUND TRUTH</text>
+</svg>

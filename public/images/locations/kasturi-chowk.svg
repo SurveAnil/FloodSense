@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675">
+  <title>Illustrative residential intersection runoff scene for Kasturi Chowk</title>
+  <defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#add3df"/><stop offset="1" stop-color="#edf0ec"/></linearGradient><linearGradient id="water" x2="0" y2="1"><stop stop-color="#75bdc8"/><stop offset="1" stop-color="#357c94"/></linearGradient></defs>
+  <rect width="1200" height="675" fill="url(#sky)"/><path d="M0 320h1200v160H0z" fill="#a4937b"/>
+  <path d="M70 225h260v230H70zm340-68h290v298H410zm370 88h245v210H780z" fill="#d4b591"/>
+  <path d="M0 450h1200v225H0z" fill="#454d52"/><path d="M0 543q320-52 580 3t620-9v138H0z" fill="url(#water)"/>
+  <path d="M600 455v200m-310-150 310 20m0-20 310-35" stroke="#eee8d2" stroke-width="9" stroke-dasharray="35 25"/>
+  <g fill="#f2c14e" stroke="#263b45" stroke-width="7"><path d="M370 418h120l38 53H345z"/><path d="M700 418h120l38 53H675z"/></g>
+  <path d="M0 96h1200v105H0z" fill="#142d38" opacity=".84"/><text x="50" y="139" fill="#fff" font-family="Arial,sans-serif" font-size="32" font-weight="700">Kasturi Chowk · Kaspate Vasti</text><text x="50" y="177" fill="#d4e8ed" font-family="Arial,sans-serif" font-size="22">Illustrative residential intersection runoff</text>
+  <rect x="782" y="582" width="368" height="48" rx="8" fill="#fff" opacity=".94"/><text x="804" y="614" fill="#7a3e00" font-family="Arial,sans-serif" font-size="20" font-weight="700">DEMO ILLUSTRATION · NOT GROUND TRUTH</text>
+</svg>

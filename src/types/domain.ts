@@ -25,6 +25,7 @@ export interface RiskLocation {
   drivers: string[];
   historicalHotspot: boolean;
   coordinates: [number, number];
+  illustrativeImageUrl?: string;
   modelVersion?: string;
   dataMode: 'replay' | 'live' | 'unknown';
   featureExplanations: Array<{
@@ -37,7 +38,7 @@ export interface RiskLocation {
 }
 
 export interface DataSourceStatus {
-  name: 'IMD' | 'CWC' | 'PMC' | 'GIS';
+  name: 'IMD' | 'CWC' | 'PMC' | 'GIS' | 'Open-Meteo';
   type: string;
   state: DataState;
   lastUpdated: string;

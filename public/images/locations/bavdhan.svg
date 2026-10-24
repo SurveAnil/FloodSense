@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img">
+  <title>Illustrative hillside runoff scene for Bavdhan Link Road</title>
+  <defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#a7d4e6"/><stop offset="1" stop-color="#e9efed"/></linearGradient><linearGradient id="water" x2="0" y2="1"><stop stop-color="#6ab9c8"/><stop offset="1" stop-color="#267999"/></linearGradient></defs>
+  <rect width="1200" height="675" fill="url(#sky)"/><path d="M0 400 110 280l105 76 170-205 170 200 125-115 150 190 130-225 240 220v150H0z" fill="#748e75"/>
+  <path d="M0 455h1200v220H0z" fill="#424d52"/><path d="M0 565q230-45 450 0t750-12v122H0z" fill="url(#water)"/>
+  <path d="M390 208 350 410m70-184-10 195m490-84-28 105m70-130-15 125" stroke="#be9c68" stroke-width="13" opacity=".8"/>
+  <path d="M120 462h220m120 90h210m100-88h240" stroke="#ecebd8" stroke-width="8" stroke-dasharray="38 25"/>
+  <path d="M0 96h1200v105H0z" fill="#142d38" opacity=".84"/><text x="50" y="139" fill="#fff" font-family="Arial,sans-serif" font-size="32" font-weight="700">Bavdhan Link Road</text><text x="50" y="177" fill="#d4e8ed" font-family="Arial,sans-serif" font-size="22">Illustrative hillside runoff and roadway scene</text>
+  <rect x="782" y="582" width="368" height="48" rx="8" fill="#fff" opacity=".94"/><text x="804" y="614" fill="#7a3e00" font-family="Arial,sans-serif" font-size="20" font-weight="700">DEMO ILLUSTRATION · NOT GROUND TRUTH</text>
+</svg>

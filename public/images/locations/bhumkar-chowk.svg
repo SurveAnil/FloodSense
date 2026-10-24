@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675">
+  <title>Illustrative service-road ponding and traffic scene for Bhumkar Chowk</title>
+  <defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#a8d0e1"/><stop offset="1" stop-color="#e9efef"/></linearGradient><linearGradient id="water" x2="0" y2="1"><stop stop-color="#68bccb"/><stop offset="1" stop-color="#287b98"/></linearGradient></defs>
+  <rect width="1200" height="675" fill="url(#sky)"/><path d="M0 330h1200v120H0z" fill="#8a9895"/><path d="M0 400h1200v275H0z" fill="#414b51"/>
+  <path d="M0 518q260-46 510 8t690-8v157H0z" fill="url(#water)"/><path d="M0 442h1200" stroke="#e7e1c8" stroke-width="12"/>
+  <path d="M120 365h280v60H120zm500 0h250v60H620z" fill="#d1a277"/>
+  <g fill="#f3c552" stroke="#263a44" stroke-width="8"><path d="M195 384h125l40 58H165z"/><path d="M485 384h125l40 58H455z"/><path d="M790 384h125l40 58H760z"/></g>
+  <path d="M0 96h1200v105H0z" fill="#142d38" opacity=".84"/><text x="50" y="139" fill="#fff" font-family="Arial,sans-serif" font-size="32" font-weight="700">Bhumkar Chowk · Wakad</text><text x="50" y="177" fill="#d4e8ed" font-family="Arial,sans-serif" font-size="22">Illustrative bypass service-lane ponding</text>
+  <rect x="782" y="582" width="368" height="48" rx="8" fill="#fff" opacity=".94"/><text x="804" y="614" fill="#7a3e00" font-family="Arial,sans-serif" font-size="20" font-weight="700">DEMO ILLUSTRATION · NOT GROUND TRUTH</text>
+</svg>

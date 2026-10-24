@@ -10,6 +10,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import type { DataSourceStatus, RiskLocation } from '../types/domain';
 import type { MapFeature } from '../services/map-service';
+import { arcgisBasemapAttribution, arcgisBasemapTileUrl } from '../services/arcgis-basemap';
 
 type MapLayer = 'predictions' | 'citizen' | 'field' | 'official' | 'demoContext';
 
@@ -36,6 +37,7 @@ const featureStyle: Record<MapFeature['feature_type'], { color: string; symbol: 
 
 const tileUrl = 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png';
 const tileAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors';
+const arcgisApiKey = import.meta.env.VITE_ARCGIS_API_KEY;
 
 function escapeHtml(value: string) {
   return value.replace(/[&<>"']/g, (character) => ({
@@ -55,10 +57,15 @@ function featurePopup(feature: MapFeature) {
   return `<strong>${escapeHtml(feature.title)}</strong><br>${escapeHtml(style.label)}${result ? ` · ${escapeHtml(result)}` : ''}<br>${escapeHtml(feature.status)}<br>${escapeHtml(feature.observed_at)}`;
 }
 
+function locationImagePopup(location: RiskLocation): string {
+  if (!location.illustrativeImageUrl) return '';
+  return `<figure class="risk-popup-illustration"><img src="${escapeHtml(location.illustrativeImageUrl)}" alt="Illustrative scene for ${escapeHtml(location.name)}; not a verified ground-truth photo"><figcaption>Illustrative demo scene · not a verified ground-truth photo</figcaption></figure>`;
+}
+
 function demoContextPopup(location: RiskLocation): string {
   const context = location.demoContext;
   if (!context) return '';
-  return `<hr><strong>DEMO SCENARIO CONTEXT — NOT VERIFIED</strong><br>${escapeHtml(context.sourceLabel)}<br>Mock citizen report count: ${context.citizenReportCount} (${context.citizenReportExamples.length} example summaries)<br>Examples: ${context.citizenReportExamples.map(escapeHtml).join(' · ')}<br>Field observation: ${escapeHtml(context.fieldObservationSummary)}<br>Mock official-problem status: ${escapeHtml(context.officialProblemStatus)} — ${escapeHtml(context.officialProblemSummary)}<br>Why light rain can cause congestion: ${escapeHtml(context.contextualNotes)}`;
+  return `${locationImagePopup(location)}<hr><strong>DEMO SCENARIO CONTEXT — NOT VERIFIED</strong><br>${escapeHtml(context.sourceLabel)}<br>Mock citizen report count: ${context.citizenReportCount} (${context.citizenReportExamples.length} example summaries)<br>Examples: ${context.citizenReportExamples.map(escapeHtml).join(' · ')}<br>Field observation: ${escapeHtml(context.fieldObservationSummary)}<br>Mock official-problem status: ${escapeHtml(context.officialProblemStatus)} — ${escapeHtml(context.officialProblemSummary)}<br>Why light rain can cause congestion: ${escapeHtml(context.contextualNotes)}`;
 }
 
 export function RiskMap({
@@ -82,6 +89,7 @@ export function RiskMap({
 }) {
   const mapElement = useRef<HTMLDivElement>(null);
   const mapRef = useRef<L.Map | null>(null);
+  const tileLayerRef = useRef<L.TileLayer | null>(null);
   const layersRef = useRef<Record<MapLayer, L.LayerGroup> | null>(null);
   const [tileUnavailable, setTileUnavailable] = useState(false);
   const [visible, setVisible] = useState(initialLayers);
@@ -95,13 +103,6 @@ export function RiskMap({
       zoomControl: true,
       scrollWheelZoom: false,
     });
-    const tiles = L.tileLayer(tileUrl, {
-      maxZoom: 19,
-      attribution: tileAttribution,
-      crossOrigin: true,
-    });
-    tiles.on('tileerror', () => setTileUnavailable(true));
-    tiles.addTo(map);
     mapRef.current = map;
     layersRef.current = {
       predictions: L.layerGroup().addTo(map),
@@ -116,6 +117,30 @@ export function RiskMap({
       layersRef.current = null;
     };
   }, []);
+
+  useEffect(() => {
+    const map = mapRef.current;
+    if (!map) return;
+    const arcgisStyle = basemap === 'satellite' ? 'Imagery' : basemap === 'terrain' ? 'Topographic' : undefined;
+    const url = arcgisStyle
+      ? arcgisBasemapTileUrl(arcgisStyle, arcgisApiKey)
+      : tileUrl;
+    if (!url) return;
+
+    setTileUnavailable(false);
+    const tiles = L.tileLayer(url, {
+      maxZoom: 19,
+      attribution: arcgisStyle ? arcgisBasemapAttribution(arcgisStyle) : tileAttribution,
+      crossOrigin: true,
+    });
+    tiles.on('tileerror', () => setTileUnavailable(true));
+    tiles.addTo(map);
+    tileLayerRef.current = tiles;
+    return () => {
+      tiles.remove();
+      if (tileLayerRef.current === tiles) tileLayerRef.current = null;
+    };
+  }, [basemap]);
 
   useEffect(() => {
     const groups = layersRef.current;
@@ -150,7 +175,7 @@ export function RiskMap({
         }),
       });
       marker.bindPopup(
-        `<strong>${escapeHtml(location.name)}</strong><br>${escapeHtml(location.area)} · Pune<br>${escapeHtml(location.risk)} risk · ${location.score}/100<br>${location.demoContext ? 'Scenario window' : 'Prediction window'}: ${escapeHtml(location.predictionTime)}<br>Score basis: ${escapeHtml(location.modelVersion ?? 'replay')} · ${escapeHtml(location.dataMode)} data<br>Context: ${escapeHtml(location.drivers.join(', ') || 'unavailable')}<br>Sources: ${escapeHtml(sources.length ? sources.map((source) => `${source.name}: ${source.state} (${source.lastUpdated})`).join('; ') : 'source freshness unavailable')}${demoContextPopup(location)}`,
+        `<strong>${escapeHtml(location.name)}</strong><br>${escapeHtml(location.area)} · Pune<br>${escapeHtml(location.risk)} risk · ${location.score}/100<br>${location.demoContext ? 'Scenario window' : 'Prediction window'}: ${escapeHtml(location.predictionTime)}<br>Score basis: ${escapeHtml(location.modelVersion ?? 'replay')} · ${escapeHtml(location.dataMode)} data<br>Context: ${escapeHtml(location.drivers.join(', ') || 'unavailable')}<br>Sources: ${escapeHtml(sources.length ? sources.map((source) => `${source.name}: ${source.state} (${source.lastUpdated})`).join('; ') : 'source freshness unavailable')}${location.demoContext ? demoContextPopup(location) : locationImagePopup(location)}`,
       );
       marker.on('click', () => onSelect(location.id));
       marker.addTo(groups.predictions);
@@ -200,14 +225,16 @@ export function RiskMap({
             onChange={(event) => setBasemap(event.target.value as typeof basemap)}
           >
             <option value="street">Street · OpenStreetMap</option>
-            <option value="satellite" disabled>Satellite · provider unavailable</option>
-            <option value="terrain" disabled>Terrain · provider unavailable</option>
+            <option value="satellite" disabled={!arcgisBasemapTileUrl('Imagery', arcgisApiKey)}>Satellite · ArcGIS imagery</option>
+            <option value="terrain" disabled={!arcgisBasemapTileUrl('Topographic', arcgisApiKey)}>Terrain · ArcGIS topographic</option>
           </select>
         </label>
-        <span className="tile-provider-note"><CircleHelp size={14} /> Satellite and terrain tiles are not configured.</span>
-        <span className="map-source-freshness" title={sources.map((source) => `${source.name}: ${source.state}; ${source.lastUpdated}`).join('\n')}>
+        {!arcgisApiKey?.trim() && <span className="tile-provider-note"><CircleHelp size={14} /> Configure VITE_ARCGIS_API_KEY to enable ArcGIS basemaps.</span>}
+        <span className="map-source-freshness" title={sources.map((source) => `${source.name}: ${source.state}; ${source.lastUpdated}; ${source.detail}`).join('\n')}>
           {sources.length
-            ? sources.map((source) => `${source.name} ${source.state.toLowerCase()}`).join(' · ')
+            ? sources.map((source) => source.name === 'Open-Meteo'
+              ? `${source.name} ${source.state.toLowerCase()} · ${source.lastUpdated}`
+              : `${source.name} ${source.state.toLowerCase()}`).join(' · ')
             : 'Source freshness unavailable for this view'}
         </span>
       </div>
@@ -222,11 +249,11 @@ export function RiskMap({
       </fieldset>
       <div className="gis-map-frame">
         <div ref={mapElement} className="leaflet-map" role="region" aria-label="Interactive map of Pune flood-risk predictions and authorized reports" />
-        {tileUnavailable && <div className="tile-error-banner" role="status"><Waves size={15} /> Street tiles unavailable. Markers and zoom remain usable.</div>}
+        {tileUnavailable && <div className="tile-error-banner" role="status"><Waves size={15} /> Selected basemap tiles are unavailable. Markers and zoom remain usable.</div>}
         {loadingFeatures && <div className="map-loading-banner" role="status">Loading authorized report and problem layers…</div>}
         {featureError && <div className="map-feature-error" role="alert"><span>{featureError}</span><button type="button" onClick={onRetryFeatures}>Retry layers</button></div>}
         {!locations.length && !features.length && !loadingFeatures && !featureError && <div className="map-empty-state">No prediction or incident locations to display.</div>}
-        <div className="map-coordinate-note"><MapPin size={12} /> WGS84 coordinates · OpenStreetMap © contributors</div>
+        <div className="map-coordinate-note"><MapPin size={12} /> WGS84 coordinates · Basemap credits shown above</div>
       </div>
       <div className="map-legend map-legend-gis" aria-label="Map symbol legend">
         <span><i className="legend-risk-sample risk-critical" />Risk category (color) and score</span>

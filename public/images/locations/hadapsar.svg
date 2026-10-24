@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675">
+  <title>Illustrative busy market road rain scene for Hadapsar</title>
+  <defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#a9d0df"/><stop offset="1" stop-color="#edf0ee"/></linearGradient><linearGradient id="water" x2="0" y2="1"><stop stop-color="#76bcc8"/><stop offset="1" stop-color="#37819a"/></linearGradient></defs>
+  <rect width="1200" height="675" fill="url(#sky)"/><path d="M0 280h1200v195H0z" fill="#cda477"/>
+  <path d="M0 330h200v130H0zm230-55h205v185H230zm235 38h180v147H465zm650-15h200v162h-200z" fill="#b98361"/>
+  <path d="M0 462h1200v213H0z" fill="#454e53"/><path d="M0 555q250-26 485 9t715-10v121H0z" fill="url(#water)"/>
+  <path d="M70 455h1060" stroke="#e8e4d4" stroke-width="8" stroke-dasharray="42 28"/>
+  <g fill="#efc04e" stroke="#283d46" stroke-width="7"><path d="M230 415h112l35 47H204z"/><path d="M684 415h112l35 47H658z"/></g>
+  <path d="M0 96h1200v105H0z" fill="#142d38" opacity=".84"/><text x="50" y="139" fill="#fff" font-family="Arial,sans-serif" font-size="32" font-weight="700">Hadapsar Market Approach</text><text x="50" y="177" fill="#d4e8ed" font-family="Arial,sans-serif" font-size="22">Illustrative urban market-road rain scene</text>
+  <rect x="782" y="582" width="368" height="48" rx="8" fill="#fff" opacity=".94"/><text x="804" y="614" fill="#7a3e00" font-family="Arial,sans-serif" font-size="20" font-weight="700">DEMO ILLUSTRATION · NOT GROUND TRUTH</text>
+</svg>

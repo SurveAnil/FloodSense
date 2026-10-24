@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img">
+  <title>Illustrative waterlogging scene for Kothrud Depot Junction</title>
+  <defs>
+    <linearGradient id="sky" x2="0" y2="1"><stop stop-color="#a9d5e8"/><stop offset="1" stop-color="#e5edf0"/></linearGradient>
+    <linearGradient id="water" x2="0" y2="1"><stop stop-color="#64b8c9"/><stop offset="1" stop-color="#287b9b"/></linearGradient>
+  </defs>
+  <rect width="1200" height="675" fill="url(#sky)"/>
+  <path d="M0 320 185 250 310 310 475 220 625 310 800 245 980 315 1200 235v165H0z" fill="#768b83"/>
+  <path d="M80 300h180v165H80zm215-48h200v213H295zm680 27h165v186H990z" fill="#d2a984"/>
+  <path d="M0 435h1200v240H0z" fill="#424b50"/>
+  <path d="M0 520q260-40 485 8t715-10v157H0z" fill="url(#water)"/>
+  <path d="M80 585h220m70-12h220m105 25h230m60-23h130" stroke="#c9e7e9" stroke-width="8" stroke-linecap="round" opacity=".8"/>
+  <g fill="#f2c14e" stroke="#263b45" stroke-width="8"><path d="M205 432h145l42 57H175z"/><path d="M755 430h145l40 57H725z"/></g>
+  <path d="M0 96h1200v105H0z" fill="#142d38" opacity=".84"/>
+  <text x="50" y="139" fill="#fff" font-family="Arial,sans-serif" font-size="32" font-weight="700">Kothrud Depot Junction</text>
+  <text x="50" y="177" fill="#d4e8ed" font-family="Arial,sans-serif" font-size="22">Illustrative roadway waterlogging scene</text>
+  <rect x="782" y="582" width="368" height="48" rx="8" fill="#fff" opacity=".94"/>
+  <text x="804" y="614" fill="#7a3e00" font-family="Arial,sans-serif" font-size="20" font-weight="700">DEMO ILLUSTRATION · NOT GROUND TRUTH</text>
+</svg>
